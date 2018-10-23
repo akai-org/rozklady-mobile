@@ -6,4 +6,16 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+    <string name="my_stops">Moje Przystanki</string>
+
+    <string name="baraniaka">Baraniaka</string>
+    <string name="kornicka">Kórnicka</string>
+    <string name="politechnika">Politechnika</string>
+
+    <string name="bikes">Stacje Rowerowe PP</string>
+    <string name="my_bikes">Moje Stacje Rowerowe</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

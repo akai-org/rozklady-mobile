@@ -15,5 +15,7 @@
 
     <string name="bikes">Stacje Rowerowe PP</string>
     <string name="my_bikes">Moje Stacje Rowerowe</string>
+    <string name="city_bikes">Rowery Miejske</string>
+    <string name="saved_stations">Zapisane Stacje</string>
 
 </resources>

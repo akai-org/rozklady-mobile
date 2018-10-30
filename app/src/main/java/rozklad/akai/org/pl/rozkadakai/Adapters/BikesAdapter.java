@@ -15,12 +15,12 @@ import rozklad.akai.org.pl.rozkadakai.Data.Place;
 import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
-public class MyBikesAdapter extends RecyclerView.Adapter<MyBikesAdapter.BikesViewHolder> {
+public class BikesAdapter extends RecyclerView.Adapter<BikesAdapter.BikesViewHolder> {
 
     private ArrayList<Place> places = null;
     private MainActivity parentActivity = null;
 
-    public MyBikesAdapter(ArrayList<Place> places, MainActivity parentActivity) {
+    public BikesAdapter(ArrayList<Place> places, MainActivity parentActivity) {
         this.places = places;
         this.parentActivity = parentActivity;
     }
@@ -45,8 +45,9 @@ public class MyBikesAdapter extends RecyclerView.Adapter<MyBikesAdapter.BikesVie
                         parentActivity.getApplicationContext().getColor(R.color.orange));
 
             } else {
-                bikesViewHolder.countTextView.setTextColor(Color.WHITE);
+                bikesViewHolder.countTextView.setTextColor(Color.GRAY);
             }
+            bikesViewHolder.nameTextView.setTextColor(Color.GRAY);
         }
         bikesViewHolder.nameTextView.setText(place.getName());
         bikesViewHolder.countTextView.setText(String.valueOf(place.getCount()));
@@ -55,6 +56,10 @@ public class MyBikesAdapter extends RecyclerView.Adapter<MyBikesAdapter.BikesVie
     @Override
     public int getItemCount() {
         return places.size();
+    }
+
+    public void setPlaces(ArrayList<Place> places) {
+        this.places = places;
     }
 
     class BikesViewHolder extends RecyclerView.ViewHolder {

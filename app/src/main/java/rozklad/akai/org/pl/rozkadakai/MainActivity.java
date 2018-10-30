@@ -16,22 +16,23 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment;
-import rozklad.akai.org.pl.rozkadakai.Fragments.MyBikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BikesFragment.OnFragmentInteractionListener,
-        MyBikesFragment.OnFragmentInteractionListener,
         TramsFragment.OnFragmentInteractionListener,
         MultiTramsFragment.OnFragmentInteractionListener {
 
     private FrameLayout fragmentContainer = null;
+    private JSONArray places = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                     fragment).commit();
         }
+
+        places = DataGetter.getBikePlaces();
     }
 
     @Override
@@ -144,8 +147,6 @@ public class MainActivity extends AppCompatActivity
                 Stop stop = new Stop("Baraniaka", symbols);
 
                 MultiTramsFragment fragment = MultiTramsFragment.newInstance(this, stop);
-                //getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
-                /*fragment = MultiTramsFragment.newInstance(this, stop);*/
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         fragment).commit();
 
@@ -174,8 +175,6 @@ public class MainActivity extends AppCompatActivity
                         fragment).commit();
             }
         }
-        Toast.makeText(getApplicationContext(), "Open Put Stops: " + name,
-                Toast.LENGTH_SHORT).show();
     }
 
     private void openMyStops() {
@@ -185,18 +184,21 @@ public class MainActivity extends AppCompatActivity
 
     private void openBikes() {
         if (fragmentContainer != null) {
-            BikesFragment bikesFragment = BikesFragment.newInstance();
+            String[] names = {"Politechnika Centrum Wykładowe", "Kórnicka"};
+            BikesFragment bikesFragment = BikesFragment.newInstance(this, names, places, false);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     bikesFragment).commit();
         }
-        Toast.makeText(getApplicationContext(), "Open Bikes", Toast.LENGTH_SHORT).show();
+
     }
 
     private void openMyBikes() {
         if (fragmentContainer != null) {
-            MyBikesFragment myBikesFragment = MyBikesFragment.newInstance(this);
+            //TODO wczytywanie zapisanych nazw z pamięci
+            String[] names = {"Murawa / Słowiańska", "Brzask / Międzychodzka", "Kórnicka"};
+            BikesFragment bikesFragment = BikesFragment.newInstance(this, names, places, true);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    myBikesFragment).commit();
+                    bikesFragment).commit();
         }
     }
 

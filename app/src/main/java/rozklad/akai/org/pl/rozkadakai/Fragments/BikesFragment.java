@@ -1,14 +1,14 @@
 package rozklad.akai.org.pl.rozkadakai.Fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +17,15 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
+import rozklad.akai.org.pl.rozkadakai.Adapters.BikesAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Place;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
+import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,13 +37,16 @@ import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
  */
 public class BikesFragment extends Fragment {
 
-    private TextView poliNameTextView = null;
-    private TextView poliCountTextView = null;
-    private TextView kornickaNameTextView = null;
-    private TextView kornickaCountTextView = null;
-    private CountDownTimer timer = null;
-
     private OnFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
+    private TextView nameTextView;
+    private BikesAdapter adapter;
+    private MainActivity parentActivity;
+    private CountDownTimer timer;
+    private ArrayList<Place> placesArrayList;
+    private JSONArray places;
+    private String[] names;
+    private boolean my;
 
     public BikesFragment() {
         // Required empty public constructor
@@ -52,10 +58,12 @@ public class BikesFragment extends Fragment {
      *
      * @return A new instance of fragment BikesFragment.
      */
-    public static BikesFragment newInstance() {
+    public static BikesFragment newInstance(MainActivity parentActivity, String[] names, JSONArray places, boolean my) {
         BikesFragment fragment = new BikesFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+        fragment.setParentActivity(parentActivity);
+        fragment.setNames(names);
+        fragment.setPlaces(places);
+        fragment.setMain(my);
         return fragment;
     }
 
@@ -68,16 +76,22 @@ public class BikesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bikes, container, false);
+        return inflater.inflate(R.layout.fragment_my_bikes, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        poliNameTextView = view.findViewById(R.id.poli_name_textView);
-        poliCountTextView = view.findViewById(R.id.poli_count_textView);
-        kornickaCountTextView = view.findViewById(R.id.kornicka_count_textView);
-        kornickaNameTextView = view.findViewById(R.id.kornicka_name_textView);
-        loadBikes();
+        super.onViewCreated(view, savedInstanceState);
+        recyclerView = view.findViewById(R.id.my_bikes_recycler_view);
+        nameTextView = view.findViewById(R.id.places_name_textView);
+        if (my) {
+            nameTextView.setText(parentActivity.getText(R.string.saved_stations));
+        }
+        placesArrayList = loadMyPlaces();
+        adapter = new BikesAdapter(placesArrayList, parentActivity);
+        recyclerView.setLayoutManager(new LinearLayoutManager(parentActivity));
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         timer = new CountDownTimer(30000, 15000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -86,12 +100,14 @@ public class BikesFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                Log.d(KOSSA_LOG, "Refresh bikes");
-                loadBikes();
+                places = DataGetter.getBikePlaces();
+                placesArrayList = loadMyPlaces();
+                adapter.setPlaces(placesArrayList);
+                adapter.notifyDataSetChanged();
+                Log.d(KOSSA_LOG, "BikesFragment: Refresh");
                 this.start();
             }
         }.start();
-        super.onViewCreated(view, savedInstanceState);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -114,44 +130,32 @@ public class BikesFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(KOSSA_LOG, "BikeFragment: onDetach()");
-        timer.cancel();
         mListener = null;
+        timer.cancel();
     }
 
-    private void loadBikes() {
+    public void setParentActivity(MainActivity parentActivity) {
+        this.parentActivity = parentActivity;
+    }
 
-        JSONArray places = DataGetter.getBikePlaces();
-        //Politechnika Centrum Wykładowe 16
-        //Kórnicka  96
-        Place kornicka = DataGetter.getPlaceByName(places, "Kórnicka");
-        Place politechnika = DataGetter.getPlaceByName(places, "Politechnika Centrum Wykładowe");
-        poliNameTextView.setText("Politechnika Centrum Wykładowe");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (politechnika.getCount() <= 2) {
-                poliCountTextView.setTextColor(getContext().getColor(R.color.red));
-            } else if (politechnika.getCount() < 5) {
-                poliCountTextView.setTextColor(getContext().getColor(R.color.orange));
+    public void setNames(String[] names) {
+        this.names = names;
+    }
 
-            } else {
-                poliCountTextView.setTextColor(Color.WHITE);
-            }
+    public void setPlaces(JSONArray places) {
+        this.places = places;
+    }
+
+    public void setMain(boolean my) {
+        this.my = my;
+    }
+
+    private ArrayList<Place> loadMyPlaces() {
+        ArrayList<Place> list = new ArrayList<>();
+        for (int i = 0; i < names.length; i++) {
+            list.add(DataGetter.getPlaceByName(places, names[i]));
         }
-        poliCountTextView.setText("" + politechnika.getCount());
-
-        kornickaNameTextView.setText("Kórnicka");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (kornicka.getCount() <= 2) {
-                kornickaCountTextView.setTextColor(getContext().getColor(R.color.red));
-            } else if (kornicka.getCount() < 5) {
-                kornickaCountTextView.setTextColor(getContext().getColor(R.color.orange));
-
-            } else {
-                kornickaCountTextView.setTextColor(Color.WHITE);
-            }
-        }
-        kornickaCountTextView.setText("" + kornicka.getCount());
-
+        return list;
     }
 
 
@@ -168,6 +172,4 @@ public class BikesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-
-
 }

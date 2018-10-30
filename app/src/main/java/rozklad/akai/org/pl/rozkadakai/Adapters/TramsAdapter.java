@@ -47,6 +47,9 @@ public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHol
             long min = div / 60000 - 60;
             tramsViewHolder.departureTextView.setText("< " + min + "min");
             //Log.d(KOSSA_LOG, "min = " + min + " dep = " + tram.getDeparture());
+            if (min < 0) {
+                min = 0;
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (min <= 2) {
                     tramsViewHolder.departureTextView.setTextColor(

@@ -48,7 +48,6 @@ public class MultiTramsFragment extends Fragment {
      *
      * @return A new instance of fragment MultiTramsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MultiTramsFragment newInstance(MainActivity parentActivity, Stop stop) {
         MultiTramsFragment fragment = new MultiTramsFragment();
         fragment.setParentActivity(parentActivity);
@@ -123,7 +122,6 @@ public class MultiTramsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

@@ -56,7 +56,6 @@ public class MyBikesFragment extends Fragment {
      *
      * @return A new instance of fragment MyBikesFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MyBikesFragment newInstance(MainActivity parentActivity) {
         MyBikesFragment fragment = new MyBikesFragment();
         fragment.setParentActivity(parentActivity);
@@ -101,7 +100,6 @@ public class MyBikesFragment extends Fragment {
         }.start();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -190,7 +188,6 @@ public class MyBikesFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

@@ -23,7 +23,7 @@ public class DataGetter {
 
     public static final int MAX_NAME_SIZE = 5;
 
-    // TODO nie działą z polskimi znakami
+
     public static ArrayList<Stop> getStopsByName(String name, Context context) {
         ArrayList<Stop> stops = new ArrayList<>();
         String patternStart = "{\"pattern\":\"";

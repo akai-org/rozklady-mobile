@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment;
-import rozklad.akai.org.pl.rozkadakai.Fragments.BlankFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MyBikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
@@ -28,7 +27,6 @@ import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BikesFragment.OnFragmentInteractionListener,
-        BlankFragment.OnFragmentInteractionListener,
         MyBikesFragment.OnFragmentInteractionListener,
         TramsFragment.OnFragmentInteractionListener,
         MultiTramsFragment.OnFragmentInteractionListener {

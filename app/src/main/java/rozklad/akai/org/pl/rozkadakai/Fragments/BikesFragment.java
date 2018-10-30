@@ -16,12 +16,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.concurrent.ExecutionException;
-
-import rozklad.akai.org.pl.rozkadakai.HttpGetRequest;
+import rozklad.akai.org.pl.rozkadakai.Data.Place;
+import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
@@ -125,66 +122,40 @@ public class BikesFragment extends Fragment {
     }
 
     private void loadBikes() {
-        try {
-            String myUrl = "https://api.nextbike.net/maps/nextbike-live.json?city=192";
-            HttpGetRequest getRequest = new HttpGetRequest();
-            String responce = getRequest.execute(myUrl).get();
-            //Log.d(KOSSA_LOG, "Responce: " + responce);
-            JSONObject object = new JSONObject(responce);
-            JSONArray countriesArray = object.getJSONArray("countries");
-            JSONObject poznanObject = (JSONObject) countriesArray.get(0);
-            JSONArray citiesArray = (JSONArray) poznanObject.get("cities");
-            JSONObject cityObject = (JSONObject) citiesArray.get(0);
-            JSONArray places = (JSONArray) cityObject.get("places");
-            JSONObject kornickaObject = (JSONObject) places.get(97);
-            JSONArray bikeList = (JSONArray) kornickaObject.get("bike_list");
-            //Politechnika Centrum Wykładowe 16
-            //Kórnicka  96
-            int kornickaCount = getPlaceCountByName("Kórnicka", places);
-            int poliCount = getPlaceCountByName("Politechnika Centrum Wykładowe", places);
-            poliNameTextView.setText("Politechnika Centrum Wykładowe");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (poliCount <= 2) {
-                    poliCountTextView.setTextColor(getContext().getColor(R.color.red));
-                } else if (poliCount < 5) {
-                    poliCountTextView.setTextColor(getContext().getColor(R.color.orange));
 
-                } else {
-                    poliCountTextView.setTextColor(Color.WHITE);
-                }
+        JSONArray places = DataGetter.getBikePlaces();
+        //Politechnika Centrum Wykładowe 16
+        //Kórnicka  96
+        Place kornicka = DataGetter.getPlaceByName(places, "Kórnicka");
+        Place politechnika = DataGetter.getPlaceByName(places, "Politechnika Centrum Wykładowe");
+        poliNameTextView.setText("Politechnika Centrum Wykładowe");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (politechnika.getCount() <= 2) {
+                poliCountTextView.setTextColor(getContext().getColor(R.color.red));
+            } else if (politechnika.getCount() < 5) {
+                poliCountTextView.setTextColor(getContext().getColor(R.color.orange));
+
+            } else {
+                poliCountTextView.setTextColor(Color.WHITE);
             }
-            poliCountTextView.setText("" + poliCount);
-
-            kornickaNameTextView.setText("Kórnicka");
-            kornickaCountTextView.setText("" + kornickaCount);
-
-            //Log.d(KOSSA_LOG, object.toString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
+        poliCountTextView.setText("" + politechnika.getCount());
+
+        kornickaNameTextView.setText("Kórnicka");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (kornicka.getCount() <= 2) {
+                kornickaCountTextView.setTextColor(getContext().getColor(R.color.red));
+            } else if (kornicka.getCount() < 5) {
+                kornickaCountTextView.setTextColor(getContext().getColor(R.color.orange));
+
+            } else {
+                kornickaCountTextView.setTextColor(Color.WHITE);
+            }
+        }
+        kornickaCountTextView.setText("" + kornicka.getCount());
+
     }
 
-    private int getPlaceCountByName(String name, JSONArray places) {
-        for (int i = 0; i < places.length(); i++) {
-            try {
-                JSONObject object = (JSONObject) places.get(i);
-                if (object.getString("name").compareTo(name) == 0) {
-                    JSONArray bikesList = object.getJSONArray("bike_list");
-                    int count = bikesList.length();
-                    Log.d(KOSSA_LOG, "i = " + i + " " + object.getString("name") + " count: " + count);
-                    return count;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-        return -1;
-    }
 
     /**
      * This interface must be implemented by activities that contain this

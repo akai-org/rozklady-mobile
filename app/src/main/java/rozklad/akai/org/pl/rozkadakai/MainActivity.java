@@ -16,16 +16,22 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BlankFragment;
+import rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MyBikesFragment;
+import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BikesFragment.OnFragmentInteractionListener,
         BlankFragment.OnFragmentInteractionListener,
         MyBikesFragment.OnFragmentInteractionListener,
-        TramsFragment.OnFragmentInteractionListener {
+        TramsFragment.OnFragmentInteractionListener,
+        MultiTramsFragment.OnFragmentInteractionListener {
 
     private FrameLayout fragmentContainer = null;
 
@@ -63,9 +69,14 @@ public class MainActivity extends AppCompatActivity
             if (savedInstanceState != null) {
                 return;
             }
-            BlankFragment blankFragment = BlankFragment.newInstance("", "");
+            ArrayList<String> symbols = new ArrayList<>();
+            symbols.add("PP71");
+            symbols.add("PP72");
+            Stop stop = new Stop("Politechnika", symbols);
+
+            MultiTramsFragment fragment = MultiTramsFragment.newInstance(this, stop);
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
-                    blankFragment).commit();
+                    fragment).commit();
         }
     }
 
@@ -128,9 +139,42 @@ public class MainActivity extends AppCompatActivity
 
     private void openPutStops(String name) {
         if (fragmentContainer != null) {
-            TramsFragment tramsFragment = TramsFragment.newInstance(this, "KORN43");
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    tramsFragment).commit();
+            if (name.compareTo("Baraniaka") == 0) {
+                ArrayList<String> symbols = new ArrayList<>();
+                symbols.add("BAKA42");
+                symbols.add("BAKA41");
+                Stop stop = new Stop("Baraniaka", symbols);
+
+                MultiTramsFragment fragment = MultiTramsFragment.newInstance(this, stop);
+                //getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+                /*fragment = MultiTramsFragment.newInstance(this, stop);*/
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragment).commit();
+
+            } else if (name.compareTo("Kórnicka") == 0) {
+                ArrayList<String> symbols = new ArrayList<>();
+                symbols.add("KORN41");
+                symbols.add("KORN42");
+                symbols.add("KORN43");
+                symbols.add("KORN44");
+                symbols.add("KORN45");
+                Stop stop = new Stop("Kórnicka", symbols);
+                for (int i = 0; i < getSupportFragmentManager().getFragments().size(); i++) {
+                    getSupportFragmentManager().getFragments().get(i).onDestroyView();
+                }
+                MultiTramsFragment fragment = MultiTramsFragment.newInstance(this, stop);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragment).commit();
+            } else if (name.compareTo("Politechnika") == 0) {
+                ArrayList<String> symbols = new ArrayList<>();
+                symbols.add("PP71");
+                symbols.add("PP72");
+                Stop stop = new Stop("Politechnika", symbols);
+
+                MultiTramsFragment fragment = MultiTramsFragment.newInstance(this, stop);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        fragment).commit();
+            }
         }
         Toast.makeText(getApplicationContext(), "Open Put Stops: " + name,
                 Toast.LENGTH_SHORT).show();

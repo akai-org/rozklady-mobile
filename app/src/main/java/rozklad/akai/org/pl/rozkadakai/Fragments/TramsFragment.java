@@ -1,4 +1,4 @@
-package rozklad.akai.org.pl.rozkadakai;
+package rozklad.akai.org.pl.rozkadakai.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,18 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import rozklad.akai.org.pl.rozkadakai.Adapters.TramsAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Tram;
+import rozklad.akai.org.pl.rozkadakai.DataGetter;
+import rozklad.akai.org.pl.rozkadakai.MainActivity;
+import rozklad.akai.org.pl.rozkadakai.R;
 
 import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
@@ -42,6 +38,10 @@ public class TramsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private TramsAdapter adapter;
+
+    private boolean done = false;
+
+
     private MainActivity parentActivity;
     private CountDownTimer timer;
     private String stopSymbol;
@@ -58,11 +58,11 @@ public class TramsFragment extends Fragment {
      *
      * @return A new instance of fragment TramsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static TramsFragment newInstance(MainActivity parent, String stopSymbol) {
+    public static TramsFragment newInstance(MainActivity parent, String stopSymbol, String stopName) {
         TramsFragment fragment = new TramsFragment();
         fragment.setStopSymbol(stopSymbol);
         fragment.setParentActivity(parent);
+        fragment.setStopName(stopName);
 
         return fragment;
     }
@@ -83,23 +83,35 @@ public class TramsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         recyclerView = view.findViewById(R.id.trams_recycler_view);
-        trams = loadTrams(stopSymbol);
-        adapter = new TramsAdapter(trams, parentActivity);
+        trams = DataGetter.getTramsDepartures(stopSymbol);
+
+        adapter = new TramsAdapter(trams, parentActivity, stopSymbol);
         recyclerView.setLayoutManager(new LinearLayoutManager(parentActivity));
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        Log.d(KOSSA_LOG, "TramsFragment " + stopSymbol + ": After run");
         timer = new CountDownTimer(30000, 15000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                /*if(trams.size() > 0 && !done) {
+                    adapter.setTrams(trams);
+                    adapter.notifyDataSetChanged();
+                    done = true;
+                    Log.d(KOSSA_LOG, "Length Done" + stopSymbol + ": " + trams.size());
+                }*/
 
+                //Log.d(KOSSA_LOG, "Length " + stopSymbol + ": " + trams.size());
             }
 
             @Override
             public void onFinish() {
-                trams = loadTrams(stopSymbol);
+                trams.clear();
+                trams = DataGetter.getTramsDepartures(stopSymbol);
+                adapter.setTrams(trams);
                 adapter.notifyDataSetChanged();
-                Log.d(KOSSA_LOG, "TramsFragment: Refresh");
+                Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": Refresh");
                 this.start();
             }
         }.start();
@@ -127,8 +139,10 @@ public class TramsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        Log.d(KOSSA_LOG, "TramsFragment: onDetach()");
-        timer.cancel();
+        Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": onDetach()");
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 
     public void setStopSymbol(String stopSymbol) {
@@ -143,49 +157,9 @@ public class TramsFragment extends Fragment {
         this.stopName = stopName;
     }
 
-    private ArrayList<Tram> loadTrams(String stopTag) {
-        ArrayList<Tram> trams = new ArrayList<>();
-        String przystanek = "{\"symbol\":\"" + stopTag + "\"}";
-        przystanek = URLEncoder.encode(przystanek);
-        String url = "https://www.peka.poznan.pl/vm/method.vm?method=getTimes&p0=" + przystanek;
-
-        HttpPostRequest postRequest = new HttpPostRequest();
-        try {
-            String responce = postRequest.execute(url).get();
-
-            if (responce != null) {
-                JSONObject object = new JSONObject(responce);
-                JSONObject succes = object.getJSONObject("success");
-
-                JSONObject bollard = succes.getJSONObject("bollard");
-                String name = bollard.getString("name");
-                this.setStopName(name);
-
-                JSONArray tramList = succes.getJSONArray("times");
-
-                for (int i = 0; i < tramList.length(); i++) {
-                    JSONObject tram = tramList.getJSONObject(i);
-                    String line = tram.getString("line");
-                    String departure = tram.getString("departure");
-                    String direction = tram.getString("direction");
-                    boolean realTime = tram.getBoolean("realTime");
-
-                    trams.add(new Tram(departure, direction, line, realTime));
-                }
-            } else {
-                Toast.makeText(getActivity().getApplicationContext(), "Null responce", Toast.LENGTH_SHORT).show();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return trams;
+    public void setTrams(ArrayList<Tram> trams) {
+        this.trams = trams;
     }
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -201,4 +175,5 @@ public class TramsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

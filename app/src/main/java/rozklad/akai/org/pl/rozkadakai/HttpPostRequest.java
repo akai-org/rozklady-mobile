@@ -35,7 +35,7 @@ public class HttpPostRequest extends AsyncTask<String, Void, String> {
             //Create a new InputStreamReader
             result = StreamReader.readStream(connection.getInputStream());
 
-
+            connection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
             result = null;

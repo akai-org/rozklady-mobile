@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 
-public class LancherActivity extends AppCompatActivity {
+public class LauncherActivity extends AppCompatActivity {
+
+    private boolean done = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lancher);
+        // DataGetter.getStopsByName("Kór", getApplicationContext());
         CountDownTimer timer = new CountDownTimer(2000, 500) {
             @Override
             public void onTick(long millisUntilFinished) {

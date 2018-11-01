@@ -20,6 +20,11 @@
     <string name="add">Dodaj</string>
     <string name="cancel">Anuluj</string>
     <string name="stop_name">Nazwa Przystanku</string>
+    <string name="successful_adding_bike_station">Dodano Stację Rowerową: </string>
+    <string name="error_by_adding_bike_station">Niestety nie udało się dodać stacji rowerowej.
+        Sprawdź czy już nie została dodana wcześniej.</string>
+    <string name="stop">Przystanek</string>
+    <string name="bike_station">Stacja Rowerowa</string>
 
     <string-array name="options">
         <item>Przystanek Tramwajowy</item>

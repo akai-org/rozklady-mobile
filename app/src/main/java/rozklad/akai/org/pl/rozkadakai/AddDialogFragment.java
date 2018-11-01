@@ -112,10 +112,10 @@ public class AddDialogFragment extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    nameEditText.setHint("Przystanek");
+                    nameEditText.setHint(getString(R.string.stop));
                     tramStop = true;
                 } else {
-                    nameEditText.setHint("Stacja Rowerowa");
+                    nameEditText.setHint(R.string.bike_station);
                     tramStop = false;
                 }
             }
@@ -152,10 +152,12 @@ public class AddDialogFragment extends DialogFragment {
     private void addBikesStation(String name) {
         boolean anwser = bikesDataBaseHelper.addStationName(name);
         if (anwser) {
-            // TODO zmiana informacji o dodaniu
-            Toast.makeText(getContext(), "Successful added: " + name, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),
+                    getString(R.string.successful_adding_bike_station) + name,
+                    Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getContext(), "Error by adding: " + name, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.error_by_adding_bike_station),
+                    Toast.LENGTH_LONG).show();
         }
     }
 

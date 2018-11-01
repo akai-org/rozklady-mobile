@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Adapters.BikesAdapter;
+import rozklad.akai.org.pl.rozkadakai.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.Data.Place;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.MainActivity;
@@ -46,6 +47,7 @@ public class BikesFragment extends Fragment {
     private ArrayList<Place> placesArrayList;
     private JSONArray places;
     private ArrayList<String> names;
+    private BikesDataBaseHelper bikesDataBaseHelper = null;
     private boolean my;
 
     public BikesFragment() {
@@ -58,6 +60,16 @@ public class BikesFragment extends Fragment {
      *
      * @return A new instance of fragment BikesFragment.
      */
+    public static BikesFragment newInstance(MainActivity parentActivity, BikesDataBaseHelper bikesDataBaseHelper, JSONArray places, boolean my) {
+        BikesFragment fragment = new BikesFragment();
+        fragment.setParentActivity(parentActivity);
+        fragment.setBikesDataBaseHelper(bikesDataBaseHelper);
+        fragment.setNames(bikesDataBaseHelper.getStationsNames());
+        fragment.setPlaces(places);
+        fragment.setMain(my);
+        return fragment;
+    }
+
     public static BikesFragment newInstance(MainActivity parentActivity, ArrayList<String> names, JSONArray places, boolean my) {
         BikesFragment fragment = new BikesFragment();
         fragment.setParentActivity(parentActivity);
@@ -142,6 +154,10 @@ public class BikesFragment extends Fragment {
         this.names = names;
     }
 
+    public void setBikesDataBaseHelper(BikesDataBaseHelper bikesDataBaseHelper) {
+        this.bikesDataBaseHelper = bikesDataBaseHelper;
+    }
+
     public void setPlaces(JSONArray places) {
         this.places = places;
     }
@@ -151,6 +167,9 @@ public class BikesFragment extends Fragment {
     }
 
     private ArrayList<Place> loadMyPlaces() {
+        if (bikesDataBaseHelper != null) {
+            names = bikesDataBaseHelper.getStationsNames();
+        }
         ArrayList<Place> list = new ArrayList<>();
         for (int i = 0; i < names.size(); i++) {
             list.add(DataGetter.getPlaceByName(places, names.get(i)));

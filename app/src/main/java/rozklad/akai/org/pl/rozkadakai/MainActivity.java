@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -51,8 +50,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper);
                 dialogFragment.show(getSupportFragmentManager(), "AddDialog");
-                Snackbar.make(view, "Add My Stop", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 
@@ -203,9 +200,8 @@ public class MainActivity extends AppCompatActivity
     private void openMyBikes() {
         if (fragmentContainer != null) {
             //TODO wczytywanie zapisanych nazw z pamięci
-            ArrayList<String> names = bikesDataBaseHelper.getStationsNames();
             //String[] names = {, "Brzask / Międzychodzka"};
-            BikesFragment bikesFragment = BikesFragment.newInstance(this, names, places, true);
+            BikesFragment bikesFragment = BikesFragment.newInstance(this, bikesDataBaseHelper, places, true);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     bikesFragment).commit();
         }

@@ -17,5 +17,13 @@
     <string name="my_bikes">Moje Stacje Rowerowe</string>
     <string name="city_bikes">Rowery Miejske</string>
     <string name="saved_stations">Zapisane Stacje</string>
+    <string name="add">Dodaj</string>
+    <string name="cancel">Anuluj</string>
+    <string name="stop_name">Nazwa Przystanku</string>
+
+    <string-array name="options">
+        <item>Przystanek Tramwajowy</item>
+        <item>Stacja Rowerowa</item>
+    </string-array>
 
 </resources>

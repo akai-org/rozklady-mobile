@@ -45,7 +45,7 @@ public class BikesFragment extends Fragment {
     private CountDownTimer timer;
     private ArrayList<Place> placesArrayList;
     private JSONArray places;
-    private String[] names;
+    private ArrayList<String> names;
     private boolean my;
 
     public BikesFragment() {
@@ -58,7 +58,7 @@ public class BikesFragment extends Fragment {
      *
      * @return A new instance of fragment BikesFragment.
      */
-    public static BikesFragment newInstance(MainActivity parentActivity, String[] names, JSONArray places, boolean my) {
+    public static BikesFragment newInstance(MainActivity parentActivity, ArrayList<String> names, JSONArray places, boolean my) {
         BikesFragment fragment = new BikesFragment();
         fragment.setParentActivity(parentActivity);
         fragment.setNames(names);
@@ -138,7 +138,7 @@ public class BikesFragment extends Fragment {
         this.parentActivity = parentActivity;
     }
 
-    public void setNames(String[] names) {
+    public void setNames(ArrayList<String> names) {
         this.names = names;
     }
 
@@ -152,8 +152,8 @@ public class BikesFragment extends Fragment {
 
     private ArrayList<Place> loadMyPlaces() {
         ArrayList<Place> list = new ArrayList<>();
-        for (int i = 0; i < names.length; i++) {
-            list.add(DataGetter.getPlaceByName(places, names[i]));
+        for (int i = 0; i < names.size(); i++) {
+            list.add(DataGetter.getPlaceByName(places, names.get(i)));
         }
         return list;
     }

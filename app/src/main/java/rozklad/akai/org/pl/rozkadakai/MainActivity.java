@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,9 +34,12 @@ public class MainActivity extends AppCompatActivity
 
     private FrameLayout fragmentContainer = null;
     private JSONArray places = null;
+    private BikesDataBaseHelper bikesDataBaseHelper = null;
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -45,8 +49,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper);
+                dialogFragment.show(getSupportFragmentManager(), "AddDialog");
                 Snackbar.make(view, "Add My Stop", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                     fragment).commit();
         }
-
+        bikesDataBaseHelper = new BikesDataBaseHelper(this);
         places = DataGetter.getBikePlaces();
     }
 
@@ -177,6 +181,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     private void openMyStops() {
         Toast.makeText(getApplicationContext(), "Open My Stops",
                 Toast.LENGTH_SHORT).show();
@@ -184,7 +189,10 @@ public class MainActivity extends AppCompatActivity
 
     private void openBikes() {
         if (fragmentContainer != null) {
-            String[] names = {"Politechnika Centrum Wykładowe", "Kórnicka"};
+
+            ArrayList<String> names = new ArrayList<>();
+            names.add("Politechnika Centrum Wykładowe");
+            names.add("Kórnicka");
             BikesFragment bikesFragment = BikesFragment.newInstance(this, names, places, false);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     bikesFragment).commit();
@@ -195,7 +203,8 @@ public class MainActivity extends AppCompatActivity
     private void openMyBikes() {
         if (fragmentContainer != null) {
             //TODO wczytywanie zapisanych nazw z pamięci
-            String[] names = {"Murawa / Słowiańska", "Brzask / Międzychodzka", "Kórnicka"};
+            ArrayList<String> names = bikesDataBaseHelper.getStationsNames();
+            //String[] names = {, "Brzask / Międzychodzka"};
             BikesFragment bikesFragment = BikesFragment.newInstance(this, names, places, true);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     bikesFragment).commit();
@@ -207,4 +216,6 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 }

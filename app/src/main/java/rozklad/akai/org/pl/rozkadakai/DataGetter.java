@@ -140,8 +140,10 @@ public class DataGetter {
             try {
                 JSONObject object = places.getJSONObject(i);
                 String name = object.getString("name");
-                if (name.contains(pattern)) {
+
+                if (name.toLowerCase().contains(pattern.toLowerCase())) {
                     names.add(name);
+                    Log.d(KOSSA_LOG, "Name: " + name);
                 }
                 if (names.size() > MAX_NAME_SIZE) {
                     break;

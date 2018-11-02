@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +21,10 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.Data.Stop;
+import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
+
 public class AddDialogFragment extends DialogFragment {
 
     private AlertDialog dialog;
@@ -31,8 +34,8 @@ public class AddDialogFragment extends DialogFragment {
     private ArrayAdapter<CharSequence> spinnerAdapter;
     private boolean tramStop = true;
     private JSONArray places;
-    private TextInputLayout floatingLabel;
     private BikesDataBaseHelper bikesDataBaseHelper;
+    private StopsDataBaseHelper stopsDataBaseHelper;
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -43,7 +46,9 @@ public class AddDialogFragment extends DialogFragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (s.length() >= 2) {
                 if (tramStop) {
-                    Toast.makeText(getContext(), "Text: " + s, Toast.LENGTH_SHORT).show();
+                    ArrayList<String> names = DataGetter.getStopsByPattern(s.toString());
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, names);
+                    nameEditText.setAdapter(adapter);
                 } else {
                     ArrayList<String> names = DataGetter.getPlacesNamesByPattern(s.toString(), places);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, names);
@@ -55,7 +60,16 @@ public class AddDialogFragment extends DialogFragment {
         @Override
         public void afterTextChanged(Editable s) {
             if (tramStop) {
-
+                ArrayList<String> names = DataGetter.getStopsByPattern(s.toString());
+                if (names.size() == 1) {
+                    if (s.toString().compareTo(names.get(0)) == 0) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    } else {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    }
+                } else {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }
             } else {
                 ArrayList<String> names = DataGetter.getPlacesNamesByPattern(s.toString(), places);
                 if (names.size() == 1) {
@@ -75,10 +89,13 @@ public class AddDialogFragment extends DialogFragment {
         super();
     }
 
-    public static AddDialogFragment newInstance(JSONArray places, BikesDataBaseHelper bikesDataBaseHelper) {
+    public static AddDialogFragment newInstance(JSONArray places,
+                                                BikesDataBaseHelper bikesDataBaseHelper,
+                                                StopsDataBaseHelper stopsDataBaseHelper) {
         AddDialogFragment addDialogFragment = new AddDialogFragment();
         addDialogFragment.setPlaces(places);
         addDialogFragment.setBikesDataBaseHelper(bikesDataBaseHelper);
+        addDialogFragment.setStopsDataBaseHelper(stopsDataBaseHelper);
         return addDialogFragment;
     }
 
@@ -96,7 +113,6 @@ public class AddDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         addDialogFragmentView = inflater.inflate(R.layout.add_dialog_fragment, null);
-        floatingLabel = addDialogFragmentView.findViewById(R.id.tram_input_layout);
         spinner = addDialogFragmentView.findViewById(R.id.add_spinner);
         nameEditText = addDialogFragmentView.findViewById(R.id.stop_name_editText);
         nameEditText.addTextChangedListener(textWatcher);
@@ -131,7 +147,12 @@ public class AddDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (tramStop) {
-                    Toast.makeText(getContext(), "Add", Toast.LENGTH_SHORT).show();
+                    Stop stop = DataGetter.getStopByName(nameEditText.getText().toString());
+                    String symbols = "";
+                    for (int i = 0; i < stop.getCount(); i++) {
+                        symbols += stop.getSymbol(i) + ", ";
+                    }
+                    addStop(stop);
                 } else {
                     addBikesStation(nameEditText.getText().toString());
                 }
@@ -149,9 +170,21 @@ public class AddDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    private void addStop(Stop stop) {
+        boolean answer = stopsDataBaseHelper.addStop(stop);
+        if (answer) {
+            Toast.makeText(getContext(),
+                    getString(R.string.successful_adding_stop) + stop.getName(),
+                    Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getContext(), getString(R.string.error_by_adding_stop),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void addBikesStation(String name) {
-        boolean anwser = bikesDataBaseHelper.addStationName(name);
-        if (anwser) {
+        boolean answer = bikesDataBaseHelper.addStationName(name);
+        if (answer) {
             Toast.makeText(getContext(),
                     getString(R.string.successful_adding_bike_station) + name,
                     Toast.LENGTH_LONG).show();
@@ -167,5 +200,9 @@ public class AddDialogFragment extends DialogFragment {
 
     public void setBikesDataBaseHelper(BikesDataBaseHelper bikesDataBaseHelper) {
         this.bikesDataBaseHelper = bikesDataBaseHelper;
+    }
+
+    public void setStopsDataBaseHelper(StopsDataBaseHelper stopsDataBaseHelper) {
+        this.stopsDataBaseHelper = stopsDataBaseHelper;
     }
 }

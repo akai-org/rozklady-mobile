@@ -1,4 +1,4 @@
-package rozklad.akai.org.pl.rozkadakai;
+package rozklad.akai.org.pl.rozkadakai.DataBaseHelpers;
 
 import android.content.ContentValues;
 import android.content.Context;

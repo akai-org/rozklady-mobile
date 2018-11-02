@@ -1,10 +1,12 @@
-package rozklad.akai.org.pl.rozkadakai;
+package rozklad.akai.org.pl.rozkadakai.Requests;
 
 import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import rozklad.akai.org.pl.rozkadakai.StreamReader;
 
 public class HttpGetRequest extends AsyncTask<String, Void, String> {
     public static final String REQUEST_METHOD = "GET";

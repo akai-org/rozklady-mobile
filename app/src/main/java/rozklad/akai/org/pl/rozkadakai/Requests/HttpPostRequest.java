@@ -1,10 +1,12 @@
-package rozklad.akai.org.pl.rozkadakai;
+package rozklad.akai.org.pl.rozkadakai.Requests;
 
 import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import rozklad.akai.org.pl.rozkadakai.StreamReader;
 
 public class HttpPostRequest extends AsyncTask<String, Void, String> {
 
@@ -28,6 +30,7 @@ public class HttpPostRequest extends AsyncTask<String, Void, String> {
             connection.setRequestMethod(REQUEST_METHOD);
             connection.setReadTimeout(READ_TIMEOUT);
             connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
 
             //Connect to our url
             connection.connect();

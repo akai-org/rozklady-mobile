@@ -14,26 +14,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
+import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment;
+import rozklad.akai.org.pl.rozkadakai.Fragments.MyStopsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BikesFragment.OnFragmentInteractionListener,
         TramsFragment.OnFragmentInteractionListener,
-        MultiTramsFragment.OnFragmentInteractionListener {
+        MultiTramsFragment.OnFragmentInteractionListener,
+        MyStopsFragment.OnFragmentInteractionListener {
 
     private FrameLayout fragmentContainer = null;
     private JSONArray places = null;
     private BikesDataBaseHelper bikesDataBaseHelper = null;
+    private StopsDataBaseHelper stopsDataBaseHelper = null;
 
 
 
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper);
+                DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper);
                 dialogFragment.show(getSupportFragmentManager(), "AddDialog");
             }
         });
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity
                     fragment).commit();
         }
         bikesDataBaseHelper = new BikesDataBaseHelper(this);
+        stopsDataBaseHelper = new StopsDataBaseHelper(this);
         places = DataGetter.getBikePlaces();
     }
 
@@ -180,8 +185,10 @@ public class MainActivity extends AppCompatActivity
 
 
     private void openMyStops() {
-        Toast.makeText(getApplicationContext(), "Open My Stops",
-                Toast.LENGTH_SHORT).show();
+        ArrayList<Stop> stops = stopsDataBaseHelper.getStops();
+        MyStopsFragment fragment = MyStopsFragment.newInstance(stops);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                fragment).commit();
     }
 
     private void openBikes() {

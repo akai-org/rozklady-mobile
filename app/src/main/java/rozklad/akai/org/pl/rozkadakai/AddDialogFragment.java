@@ -60,24 +60,20 @@ public class AddDialogFragment extends DialogFragment {
         @Override
         public void afterTextChanged(Editable s) {
             if (tramStop) {
+                //TODO poprawić bo za dużo rządań
+
                 ArrayList<String> names = DataGetter.getStopsByPattern(s.toString());
-                if (names.size() == 1) {
-                    if (s.toString().compareTo(names.get(0)) == 0) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                    } else {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    }
+                boolean cont = contains(names, s.toString());
+                if (cont) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 } else {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 }
             } else {
                 ArrayList<String> names = DataGetter.getPlacesNamesByPattern(s.toString(), places);
-                if (names.size() == 1) {
-                    if (s.toString().compareTo(names.get(0)) == 0) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                    } else {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    }
+                boolean cont = contains(names, s.toString());
+                if (cont) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 } else {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 }
@@ -204,5 +200,14 @@ public class AddDialogFragment extends DialogFragment {
 
     public void setStopsDataBaseHelper(StopsDataBaseHelper stopsDataBaseHelper) {
         this.stopsDataBaseHelper = stopsDataBaseHelper;
+    }
+
+    private boolean contains(ArrayList<String> names, String string) {
+        for (String name : names) {
+            if (name.compareTo(string) == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

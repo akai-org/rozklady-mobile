@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Adapters.MyStopsAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
+import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 
@@ -31,6 +33,7 @@ public class MyStopsFragment extends Fragment {
 
     private ArrayList<Stop> stops;
     private RecyclerView recyclerView;
+    private MainActivity parentActivity;
     private MyStopsAdapter adapter;
 
 
@@ -47,9 +50,10 @@ public class MyStopsFragment extends Fragment {
      * @return A new instance of fragment MyStopsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyStopsFragment newInstance(ArrayList<Stop> stops) {
+    public static MyStopsFragment newInstance(ArrayList<Stop> stops, MainActivity parent) {
         MyStopsFragment fragment = new MyStopsFragment();
         fragment.setStops(stops);
+        fragment.setParentActivity(parent);
         return fragment;
     }
 
@@ -73,6 +77,30 @@ public class MyStopsFragment extends Fragment {
         adapter = new MyStopsAdapter(stops);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    View view = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+                    if (view != null) {
+                        int position = recyclerView.getChildAdapterPosition(view);
+                        Stop stop = stops.get(position);
+                        parentActivity.startMultiTramsFragment(stop);
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean b) {
+
+            }
+        });
         adapter.notifyDataSetChanged();
 
     }
@@ -104,6 +132,10 @@ public class MyStopsFragment extends Fragment {
         this.stops = stops;
     }
 
+    public void setParentActivity(MainActivity parentActivity) {
+        this.parentActivity = parentActivity;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -118,4 +150,5 @@ public class MyStopsFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

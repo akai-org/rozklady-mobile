@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
 
     private void openMyStops() {
         ArrayList<Stop> stops = stopsDataBaseHelper.getStops();
-        MyStopsFragment fragment = MyStopsFragment.newInstance(stops);
+        MyStopsFragment fragment = MyStopsFragment.newInstance(stops, this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 fragment).commit();
     }
@@ -206,8 +206,6 @@ public class MainActivity extends AppCompatActivity
 
     private void openMyBikes() {
         if (fragmentContainer != null) {
-            //TODO wczytywanie zapisanych nazw z pamięci
-            //String[] names = {, "Brzask / Międzychodzka"};
             BikesFragment bikesFragment = BikesFragment.newInstance(this, bikesDataBaseHelper, places, true);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     bikesFragment).commit();
@@ -218,6 +216,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void startMultiTramsFragment(Stop stop) {
+        MultiTramsFragment fragment = MultiTramsFragment.newInstance(this, stop);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                fragment).commit();
     }
 
 

@@ -8,10 +8,43 @@
     tools:context=".LauncherActivity"
     tools:showIn="@layout/activity_lancher">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello"
-        android:textSize="50sp" />
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="left"
+            android:layout_margin="@dimen/margin"
+            android:background="@mipmap/akai" />
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            android:layout_margin="@dimen/margin"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/bike" />
+
+        <TextView
+            android:id="@+id/bike_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin"
+            android:textAlignment="center"
+            android:text="APP NAME"
+            android:textColor="@color/white"
+            android:textSize="@dimen/big_text_size" />
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            android:indeterminateTint="@color/white"/>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

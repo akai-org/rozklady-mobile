@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private void openMyStops() {
-        ArrayList<Stop> stops = stopsDataBaseHelper.getStops();
+        ArrayList<Stop> stops = stopsDataBaseHelper.getStops(false);
         MyStopsFragment fragment = MyStopsFragment.newInstance(stops, this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 fragment).commit();

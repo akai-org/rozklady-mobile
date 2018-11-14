@@ -25,7 +25,9 @@ public class StopsFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
         adapter.setStop(stop);
         adapter.setParentActivity(parentActivity);
         for (int i = stop.getCount() - 1; i >= 0; i--) {
-            adapter.addTramsFragment(TramsFragment.newInstance(parentActivity, stop.getSymbol(i), stop.getName()));
+            if (stop.getBoolean(i)) {
+                adapter.addTramsFragment(TramsFragment.newInstance(parentActivity, stop.getSymbol(i), stop.getName()));
+            }
         }
         return adapter;
     }

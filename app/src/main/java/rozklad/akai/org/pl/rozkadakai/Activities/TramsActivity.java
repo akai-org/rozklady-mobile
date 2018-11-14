@@ -1,13 +1,29 @@
 package rozklad.akai.org.pl.rozkadakai.Activities;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ExpandableListView;
 
+import java.util.ArrayList;
+
+import rozklad.akai.org.pl.rozkadakai.Adapters.StopsExpandableListAdapter;
+import rozklad.akai.org.pl.rozkadakai.Data.Stop;
+import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.R;
 
+import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
+
 public class TramsActivity extends AppCompatActivity {
+
+    private ExpandableListView expandableListView;
+    private StopsExpandableListAdapter adapter;
+    private StopsDataBaseHelper stopsDataBaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +33,63 @@ public class TramsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (saveStops()) {
+                    Snackbar.make(view, "Successful saved", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(view, "Error by saving", Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        expandableListView = findViewById(R.id.expndable_stops_listView);
+        stopsDataBaseHelper = new StopsDataBaseHelper(this);
+        ArrayList<Stop> stops = stopsDataBaseHelper.getStops(true);
+        adapter = new StopsExpandableListAdapter(stops, getApplicationContext());
+        expandableListView.setAdapter(adapter);
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                return false;
+            }
+        });
+        // setOnGroupClickListener listener for group heading click
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                Log.d(KOSSA_LOG, "on groupclick");
+                if (expandableListView.isGroupExpanded(groupPosition)) {
+                    expandableListView.collapseGroup(groupPosition);
+                } else {
+                    expandableListView.expandGroup(groupPosition);
+                }
+                return true;
+            }
+        });
+        adapter.notifyDataSetChanged();
+
+    }
+
+    public boolean saveStops() {
+        ArrayList<Stop> stops = adapter.getStops();
+        for (Stop stop : stops) {
+            String booleans = "";
+            for (int i = 0; i < stop.getCount(); i++) {
+                booleans += "" + stop.getBoolean(i);
+                if (i < stop.getCount() - 1) {
+                    booleans += ";";
+                }
+            }
+            if (!stopsDataBaseHelper.updateBolleans(stop.getName(), booleans)) {
+                return false;
+            }
+
+        }
+        return true;
     }
 
     @Override

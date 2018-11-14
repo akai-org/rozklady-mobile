@@ -85,6 +85,7 @@ public class TramsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.trams_recycler_view);
+        Log.d(KOSSA_LOG, "Symbol: " + stopSymbol);
         trams = DataGetter.getTramsDepartures(stopSymbol);
 
         adapter = new TramsAdapter(trams, parentActivity, stopSymbol);

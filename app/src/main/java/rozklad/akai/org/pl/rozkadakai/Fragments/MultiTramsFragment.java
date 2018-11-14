@@ -95,7 +95,7 @@ public class MultiTramsFragment extends Fragment {
     @Override
     public void onDetach() {
 
-        for (int i = 0; i < stop.getCount(); i++) {
+        for (int i = 0; i < stop.getShowCount(); i++) {
             pagerAdapter.getItem(i).onDetach();
         }
         mListener = null;

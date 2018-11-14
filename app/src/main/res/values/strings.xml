@@ -32,11 +32,12 @@
         <item>Stacja Rowerowa</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="manage_stops">Zarządzaj przystankami</string>
     <string name="manage_bikes">Zarządzaj stacjami rowerowymi</string>
-    <string name="powered_by">POWERED BY</string>
+    <string name="powered_by">Powered by</string>
     <string name="title_activity_trams">TramsActivity</string>
+    <string name="not_saved_message">Czy napewno chcesz wyjść bez zapisywania?</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
 
 </resources>

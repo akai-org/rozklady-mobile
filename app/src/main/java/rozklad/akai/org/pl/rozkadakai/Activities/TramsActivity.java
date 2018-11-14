@@ -1,11 +1,12 @@
 package rozklad.akai.org.pl.rozkadakai.Activities;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -17,13 +18,12 @@ import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.R;
 
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
-
 public class TramsActivity extends AppCompatActivity {
 
     private ExpandableListView expandableListView;
     private StopsExpandableListAdapter adapter;
     private StopsDataBaseHelper stopsDataBaseHelper;
+    private boolean saved = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class TramsActivity extends AppCompatActivity {
 
                 if (saveStops()) {
                     Snackbar.make(view, "Successful saved", Snackbar.LENGTH_LONG).show();
+                    saved = true;
                 } else {
                     Snackbar.make(view, "Error by saving", Snackbar.LENGTH_LONG).show();
                 }
@@ -49,7 +50,7 @@ public class TramsActivity extends AppCompatActivity {
         expandableListView = findViewById(R.id.expndable_stops_listView);
         stopsDataBaseHelper = new StopsDataBaseHelper(this);
         ArrayList<Stop> stops = stopsDataBaseHelper.getStops(true);
-        adapter = new StopsExpandableListAdapter(stops, getApplicationContext());
+        adapter = new StopsExpandableListAdapter(stops, getApplicationContext(), this);
         expandableListView.setAdapter(adapter);
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -61,7 +62,6 @@ public class TramsActivity extends AppCompatActivity {
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                Log.d(KOSSA_LOG, "on groupclick");
                 if (expandableListView.isGroupExpanded(groupPosition)) {
                     expandableListView.collapseGroup(groupPosition);
                 } else {
@@ -72,6 +72,10 @@ public class TramsActivity extends AppCompatActivity {
         });
         adapter.notifyDataSetChanged();
 
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     public boolean saveStops() {
@@ -96,9 +100,38 @@ public class TramsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+            closeActivity();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        closeActivity();
+    }
+
+    public void closeActivity() {
+        if (!saved) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.not_saved_message);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    saved = true;
+                    closeActivity();
+                }
+            });
+            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            finish();
+        }
     }
 }

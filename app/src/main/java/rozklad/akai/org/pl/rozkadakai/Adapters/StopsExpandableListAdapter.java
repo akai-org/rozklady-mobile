@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.TramsActivity;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.R;
 
@@ -18,10 +19,12 @@ public class StopsExpandableListAdapter extends BaseExpandableListAdapter {
 
     private ArrayList<Stop> stops;
     private Context context;
+    private TramsActivity parentActivity;
 
-    public StopsExpandableListAdapter(ArrayList<Stop> stops, Context context) {
+    public StopsExpandableListAdapter(ArrayList<Stop> stops, Context context, TramsActivity parentActivity) {
         this.stops = stops;
         this.context = context;
+        this.parentActivity = parentActivity;
     }
 
     @Override
@@ -73,7 +76,7 @@ public class StopsExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
         final Stop stop = stops.get(groupPosition);
         String name = stop.getSymbol(childPosition);
 
@@ -98,6 +101,7 @@ public class StopsExpandableListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 stops.get(groupPosition).setBoolean(childPosition, isChecked);
+                parentActivity.setSaved(false);
                 //checkBox.setChecked(!checkBox.isChecked());
             }
         });

@@ -19,11 +19,11 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Adapters.BikesAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Place;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
-import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;

@@ -1,6 +1,5 @@
 package rozklad.akai.org.pl.rozkadakai.Adapters;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Data.Tram;
-import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHolder> {
@@ -59,14 +58,17 @@ public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHol
                     tramsViewHolder.departureTextView.setTextColor(
                             parentActivity.getApplicationContext().getColor(R.color.orange));
                 } else {
-                    tramsViewHolder.departureTextView.setTextColor(Color.GRAY);
+                    tramsViewHolder.departureTextView.setTextColor(
+                            parentActivity.getApplicationContext().getColor(R.color.black_overlay));
                 }
             }
         } else {
             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
             departure.setTime(departure.getTime() - 3600000);
             tramsViewHolder.departureTextView.setText(format.format(tram.getDepartureDate()));
-            tramsViewHolder.departureTextView.setTextColor(Color.GRAY);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                tramsViewHolder.departureTextView.setTextColor(parentActivity.getApplicationContext().getColor(R.color.black_overlay));
+            }
         }
         tramsViewHolder.lineTextView.setText(tram.getLine());
     }

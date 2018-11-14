@@ -6,9 +6,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
-import rozklad.akai.org.pl.rozkadakai.MainActivity;
 
 public class StopsFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 

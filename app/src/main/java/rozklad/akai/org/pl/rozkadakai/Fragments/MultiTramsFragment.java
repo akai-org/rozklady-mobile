@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Adapters.StopsFragmentStatePagerAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
-import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;

@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Adapters.TramsAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Tram;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
-import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;

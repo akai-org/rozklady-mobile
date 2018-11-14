@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Adapters.MyStopsAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
-import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 

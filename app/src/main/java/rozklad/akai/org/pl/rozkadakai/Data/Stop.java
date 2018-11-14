@@ -5,18 +5,18 @@ import java.util.ArrayList;
 public class Stop {
 
     private String name;
-    private ArrayList<String> symbol;
+    private ArrayList<String> symbols;
 
     public Stop(String name, ArrayList<String> symbol) {
         this.name = name;
-        this.symbol = symbol;
+        this.symbols = symbol;
     }
 
     public Stop(String name, String[] tagsTab) {
         this.name = name;
-        this.symbol = new ArrayList<>();
+        this.symbols = new ArrayList<>();
         for (int i = 0; i < tagsTab.length; i++) {
-            symbol.add(tagsTab[i]);
+            symbols.add(tagsTab[i]);
         }
     }
 
@@ -24,23 +24,23 @@ public class Stop {
         return name;
     }
 
-    public ArrayList<String> getSymbol() {
-        return symbol;
+    public ArrayList<String> getSymbols() {
+        return symbols;
     }
 
     public int getCount() {
-        return symbol.size();
+        return symbols.size();
     }
 
     public String getSymbol(int position) {
-        return symbol.get(position);
+        return symbols.get(position);
     }
 
     public String getTags() {
         String tags = "";
-        for (int i = 0; i < symbol.size(); i++) {
-            tags += symbol.get(i);
-            if (i < symbol.size() - 1) {
+        for (int i = 0; i < symbols.size(); i++) {
+            tags += symbols.get(i);
+            if (i < symbols.size() - 1) {
                 tags += ";";
             }
         }

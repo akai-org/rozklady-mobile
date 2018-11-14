@@ -1,4 +1,4 @@
-package rozklad.akai.org.pl.rozkadakai;
+package rozklad.akai.org.pl.rozkadakai.Activities;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,20 +19,25 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.AddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MyStopsFragment;
+import rozklad.akai.org.pl.rozkadakai.Fragments.SettingsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
+import rozklad.akai.org.pl.rozkadakai.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BikesFragment.OnFragmentInteractionListener,
         TramsFragment.OnFragmentInteractionListener,
         MultiTramsFragment.OnFragmentInteractionListener,
-        MyStopsFragment.OnFragmentInteractionListener {
+        MyStopsFragment.OnFragmentInteractionListener,
+        SettingsFragment.OnFragmentInteractionListener {
 
     private FrameLayout fragmentContainer = null;
     private JSONArray places = null;
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            openSettings();
             return true;
         }
 
@@ -137,6 +143,8 @@ public class MainActivity extends AppCompatActivity
             openBikes();
         } else if (id == R.id.nav_my_bikes) {
             openMyBikes();
+        } else if (id == R.id.nav_settings) {
+            openSettings();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -181,6 +189,12 @@ public class MainActivity extends AppCompatActivity
                         fragment).commit();
             }
         }
+    }
+
+    private void openSettings() {
+        SettingsFragment fragment = SettingsFragment.newInstance(this);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                fragment).commit();
     }
 
 

@@ -1,6 +1,5 @@
 package rozklad.akai.org.pl.rozkadakai.Adapters;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Data.Place;
-import rozklad.akai.org.pl.rozkadakai.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 public class BikesAdapter extends RecyclerView.Adapter<BikesAdapter.BikesViewHolder> {
@@ -45,9 +44,11 @@ public class BikesAdapter extends RecyclerView.Adapter<BikesAdapter.BikesViewHol
                         parentActivity.getApplicationContext().getColor(R.color.orange));
 
             } else {
-                bikesViewHolder.countTextView.setTextColor(Color.GRAY);
+                bikesViewHolder.countTextView.setTextColor(
+                        parentActivity.getApplicationContext().getColor(R.color.black_overlay));
             }
-            bikesViewHolder.nameTextView.setTextColor(Color.GRAY);
+            bikesViewHolder.nameTextView.setTextColor(
+                    parentActivity.getApplicationContext().getColor(R.color.black_overlay));
         }
         bikesViewHolder.nameTextView.setText(place.getName());
         bikesViewHolder.countTextView.setText(String.valueOf(place.getCount()));

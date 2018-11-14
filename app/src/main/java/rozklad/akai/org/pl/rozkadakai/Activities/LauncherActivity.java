@@ -1,9 +1,11 @@
-package rozklad.akai.org.pl.rozkadakai;
+package rozklad.akai.org.pl.rozkadakai.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+
+import rozklad.akai.org.pl.rozkadakai.R;
 
 public class LauncherActivity extends AppCompatActivity {
 

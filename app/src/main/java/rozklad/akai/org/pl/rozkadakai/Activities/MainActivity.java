@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     private JSONArray places = null;
     private BikesDataBaseHelper bikesDataBaseHelper = null;
     private StopsDataBaseHelper stopsDataBaseHelper = null;
+    private boolean openMyStops = false;
 
 
 
@@ -97,6 +98,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }
+        if (openMyStops) {
+            openMyStops();
+            openMyStops = false;
         } else {
             super.onBackPressed();
         }
@@ -233,6 +238,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startMultiTramsFragment(Stop stop) {
+        openMyStops = true;
         MultiTramsFragment fragment = MultiTramsFragment.newInstance(this, stop);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 fragment).commit();

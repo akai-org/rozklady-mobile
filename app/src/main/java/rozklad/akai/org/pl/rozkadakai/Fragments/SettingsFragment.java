@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import rozklad.akai.org.pl.rozkadakai.Activities.BikesActivity;
 import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Activities.TramsActivity;
 import rozklad.akai.org.pl.rozkadakai.Adapters.SettingsRecyclerViewAdapter;
@@ -60,7 +61,6 @@ public class SettingsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -90,7 +90,8 @@ public class SettingsFragment extends Fragment {
     }
 
     public void openBikesSettings() {
-
+        Intent intent = new Intent(parent, BikesActivity.class);
+        startActivity(intent);
     }
 
     public void setParent(MainActivity parent) {
@@ -108,7 +109,6 @@ public class SettingsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

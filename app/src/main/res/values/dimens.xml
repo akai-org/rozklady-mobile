@@ -8,5 +8,6 @@
     <dimen name="margin">8dp</dimen>
     <dimen name="big_text_size">50sp</dimen>
     <dimen name="middle_text_size">30sp</dimen>
+    <dimen name="small_text_size">20sp</dimen>
     <dimen name="padding">8dp</dimen>
 </resources>

@@ -7,12 +7,12 @@
     tools:showIn="@layout/activity_trams">
 
     <ExpandableListView
-        android:id="@+id/expndable_stops_listView"
+        android:id="@+id/expandable_stops_listView"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:childDivider="#0f0"
-        android:divider="#f00"
+        android:childDivider="@color/colorPrimaryDark"
+        android:divider="@color/colorAccent"
         android:dividerHeight="1dp">
 
     </ExpandableListView>

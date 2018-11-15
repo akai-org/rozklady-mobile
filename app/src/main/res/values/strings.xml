@@ -39,5 +39,6 @@
     <string name="not_saved_message">Czy napewno chcesz wyjść bez zapisywania?</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
+    <string name="title_activity_bikes">BikesActivity</string>
 
 </resources>

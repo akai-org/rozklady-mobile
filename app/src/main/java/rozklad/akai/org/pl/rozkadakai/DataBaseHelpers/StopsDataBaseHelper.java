@@ -84,7 +84,7 @@ public class StopsDataBaseHelper extends SQLiteOpenHelper {
         return stops;
     }
 
-    public boolean updateBolleans(String name, String booleans) {
+    public boolean updateBooleans(String name, String booleans) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

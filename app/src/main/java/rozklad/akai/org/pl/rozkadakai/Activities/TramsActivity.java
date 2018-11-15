@@ -47,7 +47,7 @@ public class TramsActivity extends AppCompatActivity {
             }
         });
 
-        expandableListView = findViewById(R.id.expndable_stops_listView);
+        expandableListView = findViewById(R.id.expandable_stops_listView);
         stopsDataBaseHelper = new StopsDataBaseHelper(this);
         ArrayList<Stop> stops = stopsDataBaseHelper.getStops(true);
         adapter = new StopsExpandableListAdapter(stops, getApplicationContext(), this);
@@ -88,7 +88,7 @@ public class TramsActivity extends AppCompatActivity {
                     booleans += ";";
                 }
             }
-            if (!stopsDataBaseHelper.updateBolleans(stop.getName(), booleans)) {
+            if (!stopsDataBaseHelper.updateBooleans(stop.getName(), booleans)) {
                 return false;
             }
 

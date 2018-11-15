@@ -44,7 +44,7 @@ public class AddDialogFragment extends DialogFragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s.length() >= 2) {
+            if (s.length() % 3 == 2) {
                 if (tramStop) {
                     ArrayList<String> names = DataGetter.getStopsByPattern(s.toString());
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, names);
@@ -60,9 +60,10 @@ public class AddDialogFragment extends DialogFragment {
         @Override
         public void afterTextChanged(Editable s) {
             if (tramStop) {
-                //TODO poprawić bo za dużo rządań
-
                 ArrayList<String> names = DataGetter.getStopsByPattern(s.toString());
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, names);
+                nameEditText.setAdapter(adapter);
+
                 boolean cont = contains(names, s.toString());
                 if (cont) {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
@@ -71,6 +72,8 @@ public class AddDialogFragment extends DialogFragment {
                 }
             } else {
                 ArrayList<String> names = DataGetter.getPlacesNamesByPattern(s.toString(), places);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, names);
+                nameEditText.setAdapter(adapter);
                 boolean cont = contains(names, s.toString());
                 if (cont) {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);

@@ -95,6 +95,7 @@ public class StopsExpandableListAdapter extends BaseExpandableListAdapter {
             public void onClick(View v) {
                 stops.get(groupPosition).setBoolean(childPosition, !checkBox.isChecked());
                 checkBox.setChecked(!checkBox.isChecked());
+                parentActivity.setSaved(false);
             }
         });
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -102,7 +103,6 @@ public class StopsExpandableListAdapter extends BaseExpandableListAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 stops.get(groupPosition).setBoolean(childPosition, isChecked);
                 parentActivity.setSaved(false);
-                //checkBox.setChecked(!checkBox.isChecked());
             }
         });
 

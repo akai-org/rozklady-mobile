@@ -43,13 +43,7 @@ public class MyStopsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MyStopsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static MyStopsFragment newInstance(ArrayList<Stop> stops, MainActivity parent) {
         MyStopsFragment fragment = new MyStopsFragment();
         fragment.setStops(stops);
@@ -147,7 +141,6 @@ public class MyStopsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

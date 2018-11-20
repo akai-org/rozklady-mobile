@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity
     private boolean openMyStops = false;
 
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         stopsDataBaseHelper = new StopsDataBaseHelper(this);
         places = DataGetter.getBikePlaces();
     }
+
 
     @Override
     public void onBackPressed() {

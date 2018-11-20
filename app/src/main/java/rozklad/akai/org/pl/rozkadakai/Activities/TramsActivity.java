@@ -1,29 +1,34 @@
 package rozklad.akai.org.pl.rozkadakai.Activities;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Adapters.StopsExpandableListAdapter;
+import rozklad.akai.org.pl.rozkadakai.AddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
+import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 public class TramsActivity extends AppCompatActivity {
 
     private ExpandableListView expandableListView;
     private StopsExpandableListAdapter adapter;
+    private JSONArray places;
+    private BikesDataBaseHelper bikesDataBaseHelper;
     private StopsDataBaseHelper stopsDataBaseHelper;
-    private boolean saved = true;
+    //private boolean saved = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +42,21 @@ public class TramsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (saveStops()) {
+                DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper);
+                dialogFragment.show(getSupportFragmentManager(), "AddDialog");
+                /*if (saveStops()) {
                     Snackbar.make(view, "Successful saved", Snackbar.LENGTH_LONG).show();
                     saved = true;
                 } else {
                     Snackbar.make(view, "Error by saving", Snackbar.LENGTH_LONG).show();
-                }
+                }*/
             }
         });
 
         expandableListView = findViewById(R.id.expandable_stops_listView);
+        bikesDataBaseHelper = new BikesDataBaseHelper(this);
         stopsDataBaseHelper = new StopsDataBaseHelper(this);
+        places = DataGetter.getBikePlaces();
         ArrayList<Stop> stops = stopsDataBaseHelper.getStops(true);
         adapter = new StopsExpandableListAdapter(stops, getApplicationContext(), this);
         expandableListView.setAdapter(adapter);
@@ -74,9 +82,7 @@ public class TramsActivity extends AppCompatActivity {
 
     }
 
-    public void setSaved(boolean saved) {
-        this.saved = saved;
-    }
+
 
     public boolean saveStops() {
         ArrayList<Stop> stops = adapter.getStops();
@@ -100,7 +106,7 @@ public class TramsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            closeActivity();
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -108,30 +114,7 @@ public class TramsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        closeActivity();
+        finish();
     }
 
-    public void closeActivity() {
-        if (!saved) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.not_saved_message);
-            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saved = true;
-                    closeActivity();
-                }
-            });
-            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            finish();
-        }
-    }
 }

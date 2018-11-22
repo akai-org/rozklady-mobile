@@ -130,7 +130,6 @@ public class TramsFragment extends Fragment {
                     Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": Refresh");
                 } else {
                     adapter.notifyDataSetChanged();
-                    //TODO spawdzać czy jest teraz na ekranie
                     if (fragmentId == viewPager.getCurrentItem()) {
                         Snackbar.make(parentActivity.getFab(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
                     }

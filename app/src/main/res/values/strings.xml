@@ -19,10 +19,10 @@
     <string name="cancel">Anuluj</string>
     <string name="stop_name">Nazwa Przystanku</string>
     <string name="successful_adding_bike_station">Dodano Stację Rowerową: </string>
-    <string name="error_by_adding_bike_station">Niestety nie udało się dodać stacji rowerowej.
-        Sprawdź czy już nie została dodana wcześniej.</string>
+    <string name="error_by_adding_bike_station">Nie udało się dodać stacji rowerowej.
+        Sprawdź, czy już nie została dodana wcześniej.</string>
     <string name="successful_adding_stop">Dodano Przystanek: </string>
-    <string name="error_by_adding_stop">Niestety nie udało się dodać przystanku.
+    <string name="error_by_adding_stop">Nie udało się dodać przystanku.
         Sprawdź czy już nie został dodany wcześniej.</string>
     <string name="stop">Przystanek</string>
     <string name="bike_station">Stacja Rowerowa</string>
@@ -40,7 +40,7 @@
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="title_activity_bikes">BikesActivity</string>
-    <string name="no_internet_connection">Brak Internetu</string>
+    <string name="no_internet_connection">Brak internetu</string>
     <string name="manage_put">Wyświetlanie stacji przy Politechnice</string>
     <string name="no_places">Nie znaleziono zapisanych stacji rowerowych</string>
     <string name="missed">Niestety odjechał</string>

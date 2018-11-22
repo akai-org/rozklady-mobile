@@ -130,6 +130,13 @@ public class MyStopsFragment extends Fragment {
         this.parentActivity = parentActivity;
     }
 
+    public void refreshData(ArrayList<Stop> stops) {
+        this.stops = stops;
+        adapter.setStops(stops);
+        adapter.notifyDataSetChanged();
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

@@ -39,6 +39,10 @@ public class MyStopsAdapter extends RecyclerView.Adapter<MyStopsAdapter.MyStopsV
         return stops.size();
     }
 
+    public void setStops(ArrayList<Stop> stops) {
+        this.stops = stops;
+    }
+
     class MyStopsViewHolder extends RecyclerView.ViewHolder {
 
         private TextView nameTextView;

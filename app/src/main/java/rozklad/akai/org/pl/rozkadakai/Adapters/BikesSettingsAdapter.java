@@ -64,6 +64,10 @@ public class BikesSettingsAdapter extends RecyclerView.Adapter<BikesSettingsAdap
         return places;
     }
 
+    public void setPlaces(ArrayList<Place> places) {
+        this.places = places;
+    }
+
     protected class BikeSettingsViewHolder extends RecyclerView.ViewHolder {
 
         private View itemView;

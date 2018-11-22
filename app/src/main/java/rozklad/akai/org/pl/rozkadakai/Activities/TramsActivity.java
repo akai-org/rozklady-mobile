@@ -25,10 +25,11 @@ import rozklad.akai.org.pl.rozkadakai.AddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataBaseRefreshInterface;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.R;
 
-public class TramsActivity extends AppCompatActivity {
+public class TramsActivity extends AppCompatActivity implements DataBaseRefreshInterface {
 
     private ExpandableListView expandableListView;
     private StopsExpandableListAdapter adapter;
@@ -59,16 +60,11 @@ public class TramsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (connected) {
-                    places = DataGetter.getBikePlaces();
-                    DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper);
-                    dialogFragment.show(getSupportFragmentManager(), "AddDialog");
-                } else {
-                    Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
-                }
+                onFabClick();
 
             }
         });
+        //TODO zmieciec ikonke
 
         expandableListView = findViewById(R.id.expandable_stops_listView);
         bikesDataBaseHelper = new BikesDataBaseHelper(this);
@@ -100,6 +96,16 @@ public class TramsActivity extends AppCompatActivity {
         });
         adapter.notifyDataSetChanged();
 
+    }
+
+    private void onFabClick() {
+        if (connected) {
+            places = DataGetter.getBikePlaces();
+            DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper, this);
+            dialogFragment.show(getSupportFragmentManager(), "AddDialog");
+        } else {
+            Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -147,4 +153,10 @@ public class TramsActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void refreshData() {
+        ArrayList<Stop> stops = stopsDataBaseHelper.getStops(true);
+        adapter.setStops(stops);
+        adapter.notifyDataSetChanged();
+    }
 }

@@ -1,5 +1,6 @@
 package rozklad.akai.org.pl.rozkadakai;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -36,6 +37,8 @@ public class AddDialogFragment extends DialogFragment {
     private JSONArray places;
     private BikesDataBaseHelper bikesDataBaseHelper;
     private StopsDataBaseHelper stopsDataBaseHelper;
+    private Activity parentActivity;
+    private DataBaseRefreshInterface dataBaseRefreshInterface;
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -90,11 +93,13 @@ public class AddDialogFragment extends DialogFragment {
 
     public static AddDialogFragment newInstance(JSONArray places,
                                                 BikesDataBaseHelper bikesDataBaseHelper,
-                                                StopsDataBaseHelper stopsDataBaseHelper) {
+                                                StopsDataBaseHelper stopsDataBaseHelper, DataBaseRefreshInterface dataBaseRefreshInterface) {
         AddDialogFragment addDialogFragment = new AddDialogFragment();
         addDialogFragment.setPlaces(places);
         addDialogFragment.setBikesDataBaseHelper(bikesDataBaseHelper);
         addDialogFragment.setStopsDataBaseHelper(stopsDataBaseHelper);
+        addDialogFragment.setDataBaseRefreshInterface(dataBaseRefreshInterface);
+
         return addDialogFragment;
     }
 
@@ -155,6 +160,7 @@ public class AddDialogFragment extends DialogFragment {
                 } else {
                     addBikesStation(nameEditText.getText().toString());
                 }
+                dataBaseRefreshInterface.refreshData();
 
 
             }
@@ -212,5 +218,9 @@ public class AddDialogFragment extends DialogFragment {
             }
         }
         return false;
+    }
+
+    public void setDataBaseRefreshInterface(DataBaseRefreshInterface dataBaseRefreshInterface) {
+        this.dataBaseRefreshInterface = dataBaseRefreshInterface;
     }
 }

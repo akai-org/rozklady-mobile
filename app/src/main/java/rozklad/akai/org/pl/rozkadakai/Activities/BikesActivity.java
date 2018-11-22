@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -26,10 +27,13 @@ import rozklad.akai.org.pl.rozkadakai.AddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Data.Place;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataBaseRefreshInterface;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.R;
 
-public class BikesActivity extends AppCompatActivity {
+import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
+
+public class BikesActivity extends AppCompatActivity implements DataBaseRefreshInterface {
 
     private boolean saved = true;
     private RecyclerView recyclerView;
@@ -70,15 +74,20 @@ public class BikesActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (connected) {
-                    placesArray = DataGetter.getBikePlaces();
-                    DialogFragment dialogFragment = AddDialogFragment.newInstance(placesArray, bikesDataBaseHelper, stopsDataBaseHelper);
-                    dialogFragment.show(getSupportFragmentManager(), "AddDialog");
-                } else {
-                    Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
-                }
+                onFabClick();
             }
         });
+    }
+
+    public void onFabClick() {
+        if (connected) {
+            placesArray = DataGetter.getBikePlaces();
+            DialogFragment dialogFragment = AddDialogFragment
+                    .newInstance(placesArray, bikesDataBaseHelper, stopsDataBaseHelper, this);
+            dialogFragment.show(getSupportFragmentManager(), "AddDialog");
+        } else {
+            Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -118,4 +127,11 @@ public class BikesActivity extends AppCompatActivity {
         unregisterReceiver(networkStateReceiver);
     }
 
+    @Override
+    public void refreshData() {
+        Log.d(KOSSA_LOG, "Refresh database");
+        places = bikesDataBaseHelper.getStationsWithBooleans();
+        adapter.setPlaces(places);
+        adapter.notifyDataSetChanged();
+    }
 }

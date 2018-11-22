@@ -118,4 +118,8 @@ public class StopsExpandableListAdapter extends BaseExpandableListAdapter {
     public ArrayList<Stop> getStops() {
         return stops;
     }
+
+    public void setStops(ArrayList<Stop> stops) {
+        this.stops = stops;
+    }
 }

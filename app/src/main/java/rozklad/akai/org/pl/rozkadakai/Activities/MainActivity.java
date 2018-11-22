@@ -33,6 +33,7 @@ import rozklad.akai.org.pl.rozkadakai.AddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataBaseRefreshInterface;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity
         TramsFragment.OnFragmentInteractionListener,
         MultiTramsFragment.OnFragmentInteractionListener,
         MyStopsFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener {
+        SettingsFragment.OnFragmentInteractionListener,
+        DataBaseRefreshInterface {
 
     private FrameLayout fragmentContainer = null;
     private JSONArray places = null;
@@ -122,12 +124,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isConnected) {
-                    DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper);
-                    dialogFragment.show(getSupportFragmentManager(), "AddDialog");
-                } else {
-                    Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
-                }
+                onFabClick();
             }
         });
 
@@ -170,6 +167,14 @@ public class MainActivity extends AppCompatActivity
         //networkStateReceiver.onReceive(getApplicationContext(), getIntent());
     }
 
+    void onFabClick() {
+        if (isConnected) {
+            DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper, this);
+            dialogFragment.show(getSupportFragmentManager(), "AddDialog");
+        } else {
+            Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -390,5 +395,15 @@ public class MainActivity extends AppCompatActivity
 
     public boolean getShowPut() {
         return showPut;
+    }
+
+    @Override
+    public void refreshData() {
+        if (actualFragment != null) {
+            if (actualFragment.getClass().getName().compareTo("rozklad.akai.org.pl.rozkadakai.Fragments.MyStopsFragment") == 0) {
+                ArrayList<Stop> stops = stopsDataBaseHelper.getStops(false);
+                ((MyStopsFragment) actualFragment).refreshData(stops);
+            }
+        }
     }
 }

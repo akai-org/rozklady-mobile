@@ -64,7 +64,7 @@ public class TramsActivity extends AppCompatActivity implements DataBaseRefreshI
 
             }
         });
-        //TODO zmieciec ikonke
+
 
         expandableListView = findViewById(R.id.expandable_stops_listView);
         bikesDataBaseHelper = new BikesDataBaseHelper(this);

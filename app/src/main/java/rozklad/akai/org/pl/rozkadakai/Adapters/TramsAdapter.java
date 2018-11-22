@@ -49,7 +49,6 @@ public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHol
             } else {
                 tramsViewHolder.departureTextView.setText(parentActivity.getString(R.string.missed) + " " + -min + "min temu");
             }
-            //TODO przy ujemnym czasie info o odjechaniu
             //Log.d(KOSSA_LOG, "min = " + min + " dep = " + tram.getDeparture());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -71,8 +70,9 @@ public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHol
             }
         } else {
             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-            departure.setTime(departure.getTime() - 3600000);
-            tramsViewHolder.departureTextView.setText(format.format(tram.getDepartureDate()));
+            Date date = new Date();
+            date.setTime(departure.getTime() - 3600000);
+            tramsViewHolder.departureTextView.setText(format.format(date));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 tramsViewHolder.departureTextView.setTextColor(parentActivity.getApplicationContext().getColor(R.color.black_overlay));
             }

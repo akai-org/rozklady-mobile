@@ -76,7 +76,8 @@ public class MultiTramsFragment extends Fragment {
         vpPager = (ViewPager) view.findViewById(R.id.vpPager);
         stopNameTextView = view.findViewById(R.id.stop_name_textView);
         stopNameTextView.setText(stop.getName());
-        pagerAdapter = StopsFragmentStatePagerAdapter.newInstance(getFragmentManager(), stop, parentActivity, connected);
+        pagerAdapter = StopsFragmentStatePagerAdapter.newInstance(
+                getFragmentManager(), stop, parentActivity, connected, vpPager);
         vpPager.setAdapter(pagerAdapter);
         vpPager.setClipToPadding(false);
         vpPager.setPageMargin(12);

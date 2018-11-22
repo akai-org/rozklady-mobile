@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -48,6 +49,8 @@ public class TramsFragment extends Fragment {
     private String stopSymbol;
     private String stopName;
     private ArrayList<Tram> trams;
+    private int fragmentId;
+    private ViewPager viewPager;
 
     public TramsFragment() {
         // Required empty public constructor
@@ -59,13 +62,20 @@ public class TramsFragment extends Fragment {
      *
      * @return A new instance of fragment TramsFragment.
      */
-    public static TramsFragment newInstance(MainActivity parent, String stopSymbol, String stopName, boolean conected) {
+    public static TramsFragment newInstance(MainActivity parent, String stopSymbol, String stopName,
+                                            boolean conected, int id, ViewPager viewPager) {
         TramsFragment fragment = new TramsFragment();
         fragment.setStopSymbol(stopSymbol);
         fragment.setParentActivity(parent);
         fragment.setStopName(stopName);
         fragment.setConnected(conected);
+        fragment.setViewPager(viewPager);
+        fragment.setFragmentId(id);
         return fragment;
+    }
+
+    private void setFragmentId(int fragmentId) {
+        this.fragmentId = fragmentId;
     }
 
     private void setConnected(boolean conected) {
@@ -119,7 +129,11 @@ public class TramsFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                     Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": Refresh");
                 } else {
-                    Snackbar.make(parentActivity.getFab(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+                    adapter.notifyDataSetChanged();
+                    //TODO spawdzać czy jest teraz na ekranie
+                    if (fragmentId == viewPager.getCurrentItem()) {
+                        Snackbar.make(parentActivity.getFab(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+                    }
                 }
                 this.start();
             }
@@ -196,6 +210,10 @@ public class TramsFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
     }
 
 }

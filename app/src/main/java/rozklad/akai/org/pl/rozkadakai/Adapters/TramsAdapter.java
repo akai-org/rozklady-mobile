@@ -44,12 +44,19 @@ public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHol
         if (tram.isRealTime()) {
             long div = departure.getTime() - new Date().getTime();
             long min = div / 60000 - 60;
-            tramsViewHolder.departureTextView.setText("< " + min + "min");
-            //Log.d(KOSSA_LOG, "min = " + min + " dep = " + tram.getDeparture());
-            if (min < 0) {
-                min = 0;
+            if (min >= 0) {
+                tramsViewHolder.departureTextView.setText("< " + min + "min");
+            } else {
+                tramsViewHolder.departureTextView.setText(parentActivity.getString(R.string.missed) + " " + -min + "min temu");
             }
+            //TODO przy ujemnym czasie info o odjechaniu
+            //Log.d(KOSSA_LOG, "min = " + min + " dep = " + tram.getDeparture());
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (min < 0) {
+                    tramsViewHolder.departureTextView.setTextColor(
+                            parentActivity.getApplicationContext().getColor(R.color.red));
+                }
                 if (min <= 2) {
                     tramsViewHolder.departureTextView.setTextColor(
                             parentActivity.getApplicationContext().getColor(R.color.red));
@@ -75,12 +82,16 @@ public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHol
 
     @Override
     public int getItemCount() {
+        if (trams == null) {
+            return 0;
+        }
         return trams.size();
     }
 
     public void setTrams(ArrayList<Tram> trams) {
         this.trams = trams;
     }
+
 
     public class TramsViewHolder extends RecyclerView.ViewHolder {
 

@@ -1,10 +1,15 @@
 package rozklad.akai.org.pl.rozkadakai.Activities;
 
-import android.content.DialogInterface;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,11 +17,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Adapters.BikesSettingsAdapter;
+import rozklad.akai.org.pl.rozkadakai.AddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Data.Place;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
+import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.R;
 
 public class BikesActivity extends AppCompatActivity {
@@ -25,7 +35,19 @@ public class BikesActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BikesSettingsAdapter adapter;
     private BikesDataBaseHelper bikesDataBaseHelper;
+    private StopsDataBaseHelper stopsDataBaseHelper;
     private ArrayList<Place> places;
+    private JSONArray placesArray;
+    private boolean connected;
+    private FloatingActionButton fab;
+    private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = manager.getActiveNetworkInfo();
+            connected = ni != null && ni.isConnected();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +58,7 @@ public class BikesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         bikesDataBaseHelper = new BikesDataBaseHelper(this);
+        stopsDataBaseHelper = new StopsDataBaseHelper(this);
         places = bikesDataBaseHelper.getStationsWithBooleans();
         recyclerView = findViewById(R.id.bike_settings_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -43,15 +66,16 @@ public class BikesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (saveStations()) {
-                    Snackbar.make(view, "Successful saved", Snackbar.LENGTH_LONG).show();
-                    saved = true;
+                if (connected) {
+                    placesArray = DataGetter.getBikePlaces();
+                    DialogFragment dialogFragment = AddDialogFragment.newInstance(placesArray, bikesDataBaseHelper, stopsDataBaseHelper);
+                    dialogFragment.show(getSupportFragmentManager(), "AddDialog");
                 } else {
-                    Snackbar.make(view, "Error by saving", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -59,45 +83,21 @@ public class BikesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        closeActivity();
+        finish();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            closeActivity();
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void closeActivity() {
-        if (!saved) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.not_saved_message);
-            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saved = true;
-                    closeActivity();
-                }
-            });
-            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        } else {
-            finish();
-        }
-    }
 
-
-    private boolean saveStations() {
+    public boolean saveStations() {
         ArrayList<Place> places = adapter.getPlaces();
         for (Place place : places) {
             bikesDataBaseHelper.updateBooleans(place.getName(), Boolean.valueOf(place.isShow()).toString());
@@ -106,7 +106,16 @@ public class BikesActivity extends AppCompatActivity {
         return true;
     }
 
-    public void setSaved(boolean saved) {
-        this.saved = saved;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(networkStateReceiver);
+    }
+
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,7 @@ public class BikesFragment extends Fragment {
     private ArrayList<String> names;
     private BikesDataBaseHelper bikesDataBaseHelper = null;
     private boolean my;
+    private boolean connected;
 
     public BikesFragment() {
         // Required empty public constructor
@@ -60,22 +62,24 @@ public class BikesFragment extends Fragment {
      *
      * @return A new instance of fragment BikesFragment.
      */
-    public static BikesFragment newInstance(MainActivity parentActivity, BikesDataBaseHelper bikesDataBaseHelper, JSONArray places, boolean my) {
+    public static BikesFragment newInstance(MainActivity parentActivity, BikesDataBaseHelper bikesDataBaseHelper, JSONArray places, boolean my, boolean connected) {
         BikesFragment fragment = new BikesFragment();
         fragment.setParentActivity(parentActivity);
         fragment.setBikesDataBaseHelper(bikesDataBaseHelper);
         fragment.setNames(bikesDataBaseHelper.getStationsNames());
         fragment.setPlaces(places);
         fragment.setMain(my);
+        fragment.setConnected(connected);
         return fragment;
     }
 
-    public static BikesFragment newInstance(MainActivity parentActivity, ArrayList<String> names, JSONArray places, boolean my) {
+    public static BikesFragment newInstance(MainActivity parentActivity, ArrayList<String> names, JSONArray places, boolean my, boolean connected) {
         BikesFragment fragment = new BikesFragment();
         fragment.setParentActivity(parentActivity);
         fragment.setNames(names);
         fragment.setPlaces(places);
         fragment.setMain(my);
+        fragment.setConnected(connected);
         return fragment;
     }
 
@@ -112,11 +116,15 @@ public class BikesFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                places = DataGetter.getBikePlaces();
-                placesArrayList = loadMyPlaces();
-                adapter.setPlaces(placesArrayList);
-                adapter.notifyDataSetChanged();
-                Log.d(KOSSA_LOG, "BikesFragment: Refresh");
+                if (connected) {
+                    places = DataGetter.getBikePlaces();
+                    placesArrayList = loadMyPlaces();
+                    adapter.setPlaces(placesArrayList);
+                    adapter.notifyDataSetChanged();
+                    Log.d(KOSSA_LOG, "BikesFragment: Refresh");
+                } else {
+                    Snackbar.make(parentActivity.getFab(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+                }
                 this.start();
             }
         }.start();
@@ -167,14 +175,29 @@ public class BikesFragment extends Fragment {
     }
 
     private ArrayList<Place> loadMyPlaces() {
-        if (bikesDataBaseHelper != null) {
-            names = bikesDataBaseHelper.getStationsNames();
-        }
         ArrayList<Place> list = new ArrayList<>();
-        for (int i = 0; i < names.size(); i++) {
-            list.add(DataGetter.getPlaceByName(places, names.get(i)));
+        if (connected) {
+            if (bikesDataBaseHelper != null) {
+                names = bikesDataBaseHelper.getStationsNames();
+            }
+
+            for (int i = 0; i < names.size(); i++) {
+                list.add(DataGetter.getPlaceByName(places, names.get(i)));
+            }
         }
         return list;
+    }
+
+    public void updateConnectionStatus(boolean connected) {
+        Log.d(KOSSA_LOG, "BikesFragment updateConnectionStatus(" + connected + ")");
+        this.connected = connected;
+        if (connected) {
+            places = DataGetter.getBikePlaces();
+            placesArrayList = loadMyPlaces();
+            adapter.setPlaces(placesArrayList);
+            adapter.notifyDataSetChanged();
+            Log.d(KOSSA_LOG, "BikesFragment: Refresh");
+        }
     }
 
 
@@ -190,5 +213,9 @@ public class BikesFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

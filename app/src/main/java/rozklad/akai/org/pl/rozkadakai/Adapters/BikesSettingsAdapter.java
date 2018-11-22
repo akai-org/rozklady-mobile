@@ -43,14 +43,14 @@ public class BikesSettingsAdapter extends RecyclerView.Adapter<BikesSettingsAdap
             public void onClick(View v) {
                 bikeSettingsViewHolder.checkBox.setChecked(!bikeSettingsViewHolder.checkBox.isChecked());
                 places.get(i).setShow(!bikeSettingsViewHolder.checkBox.isChecked());
-                parentActivity.setSaved(false);
+                parentActivity.saveStations();
             }
         });
         bikeSettingsViewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 places.get(i).setShow(isChecked);
-                parentActivity.setSaved(false);
+                parentActivity.saveStations();
             }
         });
     }

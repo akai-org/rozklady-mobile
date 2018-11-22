@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,7 +40,7 @@ public class TramsFragment extends Fragment {
     private RecyclerView recyclerView;
     private TramsAdapter adapter;
 
-    private boolean done = false;
+    private boolean conected = false;
 
 
     private MainActivity parentActivity;
@@ -58,13 +59,17 @@ public class TramsFragment extends Fragment {
      *
      * @return A new instance of fragment TramsFragment.
      */
-    public static TramsFragment newInstance(MainActivity parent, String stopSymbol, String stopName) {
+    public static TramsFragment newInstance(MainActivity parent, String stopSymbol, String stopName, boolean conected) {
         TramsFragment fragment = new TramsFragment();
         fragment.setStopSymbol(stopSymbol);
         fragment.setParentActivity(parent);
         fragment.setStopName(stopName);
-
+        fragment.setConnected(conected);
         return fragment;
+    }
+
+    private void setConnected(boolean conected) {
+        this.conected = conected;
     }
 
     @Override
@@ -86,8 +91,12 @@ public class TramsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.trams_recycler_view);
         Log.d(KOSSA_LOG, "Symbol: " + stopSymbol);
-        trams = DataGetter.getTramsDepartures(stopSymbol);
-
+        if (conected) {
+            trams = DataGetter.getTramsDepartures(stopSymbol);
+        } else {
+            trams = new ArrayList<>();
+            Snackbar.make(parentActivity.getFab(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+        }
         adapter = new TramsAdapter(trams, parentActivity, stopSymbol);
         recyclerView.setLayoutManager(new LinearLayoutManager(parentActivity));
         recyclerView.setAdapter(adapter);
@@ -96,23 +105,22 @@ public class TramsFragment extends Fragment {
         timer = new CountDownTimer(30000, 15000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                /*if(trams.size() > 0 && !done) {
-                    adapter.setTrams(trams);
-                    adapter.notifyDataSetChanged();
-                    done = true;
-                    Log.d(KOSSA_LOG, "Length Done" + stopSymbol + ": " + trams.size());
-                }*/
 
-                //Log.d(KOSSA_LOG, "Length " + stopSymbol + ": " + trams.size());
             }
 
             @Override
             public void onFinish() {
-                trams.clear();
-                trams = DataGetter.getTramsDepartures(stopSymbol);
-                adapter.setTrams(trams);
-                adapter.notifyDataSetChanged();
-                Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": Refresh");
+                if (conected) {
+                    if (trams != null) {
+                        trams.clear();
+                    }
+                    trams = DataGetter.getTramsDepartures(stopSymbol);
+                    adapter.setTrams(trams);
+                    adapter.notifyDataSetChanged();
+                    Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": Refresh");
+                } else {
+                    Snackbar.make(parentActivity.getFab(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+                }
                 this.start();
             }
         }.start();
@@ -159,6 +167,21 @@ public class TramsFragment extends Fragment {
 
     public void setTrams(ArrayList<Tram> trams) {
         this.trams = trams;
+    }
+
+    public void updateConnectionStatus(boolean connected) {
+        Log.d(KOSSA_LOG, "TamsFragment updateConnectionStatus(" + connected + ")");
+        this.conected = connected;
+        if (connected) {
+            if (trams != null)
+                trams.clear();
+            trams = DataGetter.getTramsDepartures(stopSymbol);
+            if (adapter == null) {
+                adapter = new TramsAdapter(trams, parentActivity, stopSymbol);
+            }
+            adapter.setTrams(trams);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**

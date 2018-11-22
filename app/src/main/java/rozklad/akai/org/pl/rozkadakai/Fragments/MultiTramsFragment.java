@@ -37,6 +37,7 @@ public class MultiTramsFragment extends Fragment {
     private Stop stop;
     private MainActivity parentActivity;
     private ViewPager vpPager;
+    private boolean connected = false;
 
     public MultiTramsFragment() {
         // Required empty public constructor
@@ -48,10 +49,11 @@ public class MultiTramsFragment extends Fragment {
      *
      * @return A new instance of fragment MultiTramsFragment.
      */
-    public static MultiTramsFragment newInstance(MainActivity parentActivity, Stop stop) {
+    public static MultiTramsFragment newInstance(MainActivity parentActivity, Stop stop, boolean connected) {
         MultiTramsFragment fragment = new MultiTramsFragment();
         fragment.setParentActivity(parentActivity);
         fragment.setStop(stop);
+        fragment.setConnected(connected);
         return fragment;
     }
 
@@ -74,7 +76,7 @@ public class MultiTramsFragment extends Fragment {
         vpPager = (ViewPager) view.findViewById(R.id.vpPager);
         stopNameTextView = view.findViewById(R.id.stop_name_textView);
         stopNameTextView.setText(stop.getName());
-        pagerAdapter = StopsFragmentStatePagerAdapter.newInstance(getFragmentManager(), stop, parentActivity);
+        pagerAdapter = StopsFragmentStatePagerAdapter.newInstance(getFragmentManager(), stop, parentActivity, connected);
         vpPager.setAdapter(pagerAdapter);
         vpPager.setClipToPadding(false);
         vpPager.setPageMargin(12);
@@ -111,6 +113,12 @@ public class MultiTramsFragment extends Fragment {
         this.stop = stop;
     }
 
+    public void updateConnectionStatus(boolean connected) {
+        Log.d(KOSSA_LOG, "MultiTramsFragment updateConnectionStatus(" + connected + ")");
+        this.connected = connected;
+        pagerAdapter.updateConnectionStatus(connected);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -123,5 +131,9 @@ public class MultiTramsFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

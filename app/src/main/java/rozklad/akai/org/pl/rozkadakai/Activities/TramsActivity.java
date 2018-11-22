@@ -1,7 +1,14 @@
 package rozklad.akai.org.pl.rozkadakai.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +35,16 @@ public class TramsActivity extends AppCompatActivity {
     private JSONArray places;
     private BikesDataBaseHelper bikesDataBaseHelper;
     private StopsDataBaseHelper stopsDataBaseHelper;
+    private FloatingActionButton fab;
+    private boolean connected;
+    private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = manager.getActiveNetworkInfo();
+            connected = ni != null && ni.isConnected();
+        }
+    };
     //private boolean saved = true;
 
     @Override
@@ -38,25 +55,29 @@ public class TramsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper);
-                dialogFragment.show(getSupportFragmentManager(), "AddDialog");
-                /*if (saveStops()) {
-                    Snackbar.make(view, "Successful saved", Snackbar.LENGTH_LONG).show();
-                    saved = true;
+                if (connected) {
+                    places = DataGetter.getBikePlaces();
+                    DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper);
+                    dialogFragment.show(getSupportFragmentManager(), "AddDialog");
                 } else {
-                    Snackbar.make(view, "Error by saving", Snackbar.LENGTH_LONG).show();
-                }*/
+                    Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+                }
+
             }
         });
 
         expandableListView = findViewById(R.id.expandable_stops_listView);
         bikesDataBaseHelper = new BikesDataBaseHelper(this);
         stopsDataBaseHelper = new StopsDataBaseHelper(this);
-        places = DataGetter.getBikePlaces();
+        if (connected) {
+            places = DataGetter.getBikePlaces();
+        } else {
+            places = new JSONArray();
+        }
         ArrayList<Stop> stops = stopsDataBaseHelper.getStops(true);
         adapter = new StopsExpandableListAdapter(stops, getApplicationContext(), this);
         expandableListView.setAdapter(adapter);
@@ -66,7 +87,6 @@ public class TramsActivity extends AppCompatActivity {
                 return false;
             }
         });
-        // setOnGroupClickListener listener for group heading click
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -82,7 +102,17 @@ public class TramsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(networkStateReceiver);
+    }
 
     public boolean saveStops() {
         ArrayList<Stop> stops = adapter.getStops();

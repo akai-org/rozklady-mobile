@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_stops"
+            android:icon="@mipmap/tram_black"
+            android:title="@string/my_stops" />
+
+        <item
+            android:id="@+id/nav_my_bikes"
+            android:icon="@drawable/ic_bike_black_24dp"
+            android:title="@string/my_bikes" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/action_settings" />
+
+    </group>
+</menu>

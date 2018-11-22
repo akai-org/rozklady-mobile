@@ -129,13 +129,17 @@ public class DataGetter {
             HttpGetRequest getRequest = new HttpGetRequest();
             String responce = getRequest.execute(myUrl).get();
             //Log.d(KOSSA_LOG, "Responce: " + responce);
-            JSONObject object = new JSONObject(responce);
-            JSONArray countriesArray = object.getJSONArray("countries");
-            JSONObject poznanObject = (JSONObject) countriesArray.get(0);
-            JSONArray citiesArray = (JSONArray) poznanObject.get("cities");
-            JSONObject cityObject = (JSONObject) citiesArray.get(0);
-            JSONArray places = (JSONArray) cityObject.get("places");
-            return places;
+            if (responce != null) {
+                JSONObject object = new JSONObject(responce);
+                JSONArray countriesArray = object.getJSONArray("countries");
+                JSONObject poznanObject = (JSONObject) countriesArray.get(0);
+                JSONArray citiesArray = (JSONArray) poznanObject.get("cities");
+                JSONObject cityObject = (JSONObject) citiesArray.get(0);
+                JSONArray places = (JSONArray) cityObject.get("places");
+                return places;
+            } else {
+                return null;
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

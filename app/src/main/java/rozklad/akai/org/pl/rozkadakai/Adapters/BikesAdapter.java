@@ -35,23 +35,27 @@ public class BikesAdapter extends RecyclerView.Adapter<BikesAdapter.BikesViewHol
     @Override
     public void onBindViewHolder(@NonNull BikesViewHolder bikesViewHolder, int i) {
         Place place = places.get(i);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (place.getCount() <= 2) {
-                bikesViewHolder.countTextView.setTextColor(
-                        parentActivity.getApplicationContext().getColor(R.color.red));
-            } else if (place.getCount() < 5) {
-                bikesViewHolder.countTextView.setTextColor(
-                        parentActivity.getApplicationContext().getColor(R.color.orange));
+        if (place == null) {
+            bikesViewHolder.nameTextView.setText(R.string.no_places);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (place.getCount() <= 2) {
+                    bikesViewHolder.countTextView.setTextColor(
+                            parentActivity.getApplicationContext().getColor(R.color.red));
+                } else if (place.getCount() < 5) {
+                    bikesViewHolder.countTextView.setTextColor(
+                            parentActivity.getApplicationContext().getColor(R.color.orange));
 
-            } else {
-                bikesViewHolder.countTextView.setTextColor(
+                } else {
+                    bikesViewHolder.countTextView.setTextColor(
+                            parentActivity.getApplicationContext().getColor(R.color.black_overlay));
+                }
+                bikesViewHolder.nameTextView.setTextColor(
                         parentActivity.getApplicationContext().getColor(R.color.black_overlay));
             }
-            bikesViewHolder.nameTextView.setTextColor(
-                    parentActivity.getApplicationContext().getColor(R.color.black_overlay));
+            bikesViewHolder.nameTextView.setText(place.getName());
+            bikesViewHolder.countTextView.setText(String.valueOf(place.getCount()));
         }
-        bikesViewHolder.nameTextView.setText(place.getName());
-        bikesViewHolder.countTextView.setText(String.valueOf(place.getCount()));
     }
 
     @Override

@@ -27,7 +27,6 @@ public class SettingsFragment extends Fragment {
     private MainActivity parent;
 
     private OnFragmentInteractionListener mListener;
-
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -55,7 +54,7 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.settings_recyclerView);
-        adapter = new SettingsRecyclerViewAdapter(parent, this);
+        adapter = new SettingsRecyclerViewAdapter(parent, this, parent.getShowPut());
         recyclerView.setLayoutManager(new LinearLayoutManager(parent));
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();

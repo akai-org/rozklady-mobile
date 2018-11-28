@@ -61,7 +61,7 @@ public class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lancher);
+        setContentView(R.layout.activity_launcher);
         timer = new CountDownTimer(2000, 500) {
             @Override
             public void onTick(long millisUntilFinished) {

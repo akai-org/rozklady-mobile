@@ -49,12 +49,14 @@ public class TramsAdapter extends RecyclerView.Adapter<TramsAdapter.TramsViewHol
             } else {
                 tramsViewHolder.departureTextView.setText(parentActivity.getString(R.string.missed) + " " + -min + "min temu");
             }
-            //Log.d(KOSSA_LOG, "min = " + min + " dep = " + tram.getDeparture());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (min < 0) {
                     tramsViewHolder.departureTextView.setTextColor(
                             parentActivity.getApplicationContext().getColor(R.color.red));
+                }
+                if (min == 0) {
+                    tramsViewHolder.departureTextView.setText(R.string.leaves_now);
                 }
                 if (min <= 2) {
                     tramsViewHolder.departureTextView.setTextColor(

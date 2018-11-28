@@ -8,7 +8,7 @@
     tools:context=".Activities.LauncherActivity">
 
 
-    <include layout="@layout/content_lancher" />
+    <include layout="@layout/content_launcher" />
 
 
 </android.support.v4.widget.DrawerLayout>

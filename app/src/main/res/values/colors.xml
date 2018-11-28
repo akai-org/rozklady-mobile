@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#D81B60</color>
+    <!--<color name="colorPrimary">#6200EE</color>-->
+    <color name="colorPrimary">#43A047</color>
+    <color name="colorPrimaryDark">#00701A</color>
+    <color name="colorPrimaryLight">#76D275</color>
+    <color name="colorAccent">#FFC107</color>
     <color name="colorSecondary">#556200EE</color>
 
     <color name="black_overlay">#66000000</color>
@@ -10,4 +12,5 @@
     <color name="red">#FF0000</color>
     <color name="orange">#FFA500</color>
     <color name="ripple_effect">#66D81B60</color>
+    <color name="black">#000000</color>
 </resources>

@@ -1,5 +1,6 @@
 package rozklad.akai.org.pl.rozkadakai.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -29,18 +31,19 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
-import rozklad.akai.org.pl.rozkadakai.AddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.StopsDataBaseHelper;
-import rozklad.akai.org.pl.rozkadakai.DataBaseRefreshInterface;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
+import rozklad.akai.org.pl.rozkadakai.DialogFragments.BikeAddDialogFragment;
+import rozklad.akai.org.pl.rozkadakai.DialogFragments.TramAddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.MyStopsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.SettingsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
 import rozklad.akai.org.pl.rozkadakai.R;
+import rozklad.akai.org.pl.rozkadakai.RefreshInterface;
 
 import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         MultiTramsFragment.OnFragmentInteractionListener,
         MyStopsFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
-        DataBaseRefreshInterface {
+        RefreshInterface {
 
     private FrameLayout fragmentContainer = null;
     private JSONArray places = null;
@@ -60,7 +63,11 @@ public class MainActivity extends AppCompatActivity
     private boolean openMyStops = false;
     private boolean isConnected = false;
     private boolean started = false;
+    private boolean isFabOpen = false;
+    private boolean isFabClicked = false;
     private FloatingActionButton fab;
+    private FloatingActionButton bikeFab;
+    private FloatingActionButton tramFab;
     private Fragment actualFragment = null;
     private SharedPreferences preferences;
     private boolean showPut = false;
@@ -103,11 +110,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * TODO dodaj dokumentację
-     *
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,11 +122,26 @@ public class MainActivity extends AppCompatActivity
         inflateNavMenu();
 
         Log.d(KOSSA_LOG, "IsConnected: " + isConnected);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
+        bikeFab = findViewById(R.id.bike_fab);
+        tramFab = findViewById(R.id.tram_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onFabClick();
+            }
+        });
+        bikeFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBikeFabClick();
+
+            }
+        });
+        tramFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTramFabClick();
             }
         });
 
@@ -164,16 +181,65 @@ public class MainActivity extends AppCompatActivity
 
         started = true;
         Log.d(KOSSA_LOG, "Started");
-        //networkStateReceiver.onReceive(getApplicationContext(), getIntent());
     }
 
-    void onFabClick() {
+    private void onTramFabClick() {
         if (isConnected) {
-            DialogFragment dialogFragment = AddDialogFragment.newInstance(places, bikesDataBaseHelper, stopsDataBaseHelper, this);
-            dialogFragment.show(getSupportFragmentManager(), "AddDialog");
+            isFabClicked = true;
+            DialogFragment dialogFragment = TramAddDialogFragment.newInstance(stopsDataBaseHelper, this);
+            dialogFragment.show(getSupportFragmentManager(), "TramAddDialog");
         } else {
             Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+            closeFab();
         }
+    }
+
+    private void onBikeFabClick() {
+        if (isConnected) {
+            isFabClicked = true;
+            DialogFragment dialogFragment = BikeAddDialogFragment.newInstance(places, bikesDataBaseHelper, this);
+            dialogFragment.show(getSupportFragmentManager(), "BikeAddDialog");
+
+        } else {
+            Snackbar.make(fab, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
+            closeFab();
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    void onFabClick() {
+        if (!isFabOpen) {
+            CountDownTimer timer = new CountDownTimer(2000, 100) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    if (isFabOpen && !isFabClicked) {
+                        closeFab();
+                    }
+                }
+            };
+            timer.start();
+            openFab();
+        } else {
+            closeFab();
+        }
+    }
+
+    private void closeFab() {
+        bikeFab.animate().translationY(0);
+        tramFab.animate().translationY(0);
+        isFabOpen = false;
+        isFabClicked = false;
+    }
+
+    private void openFab() {
+        bikeFab.animate().translationY(-getResources().getDimension(R.dimen.standard_55));
+        tramFab.animate().translationY(-getResources().getDimension(R.dimen.standard_105));
+        isFabOpen = true;
     }
 
     @Override
@@ -404,6 +470,20 @@ public class MainActivity extends AppCompatActivity
                 ArrayList<Stop> stops = stopsDataBaseHelper.getStops(false);
                 ((MyStopsFragment) actualFragment).refreshData(stops);
             }
+        }
+    }
+
+    @Override
+    public void refreshView() {
+        closeFab();
+    }
+
+    @Override
+    public void openView(String name) {
+        if (name.compareTo("trams") == 0) {
+            openMyStops();
+        } else if (name.compareTo("bikes") == 0) {
+            openMyBikes();
         }
     }
 }

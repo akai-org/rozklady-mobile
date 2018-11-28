@@ -38,7 +38,7 @@ public class AddDialogFragment extends DialogFragment {
     private BikesDataBaseHelper bikesDataBaseHelper;
     private StopsDataBaseHelper stopsDataBaseHelper;
     private Activity parentActivity;
-    private DataBaseRefreshInterface dataBaseRefreshInterface;
+    private RefreshInterface refreshInterface;
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -93,12 +93,12 @@ public class AddDialogFragment extends DialogFragment {
 
     public static AddDialogFragment newInstance(JSONArray places,
                                                 BikesDataBaseHelper bikesDataBaseHelper,
-                                                StopsDataBaseHelper stopsDataBaseHelper, DataBaseRefreshInterface dataBaseRefreshInterface) {
+                                                StopsDataBaseHelper stopsDataBaseHelper, RefreshInterface refreshInterface) {
         AddDialogFragment addDialogFragment = new AddDialogFragment();
         addDialogFragment.setPlaces(places);
         addDialogFragment.setBikesDataBaseHelper(bikesDataBaseHelper);
         addDialogFragment.setStopsDataBaseHelper(stopsDataBaseHelper);
-        addDialogFragment.setDataBaseRefreshInterface(dataBaseRefreshInterface);
+        addDialogFragment.setRefreshInterface(refreshInterface);
 
         return addDialogFragment;
     }
@@ -114,7 +114,7 @@ public class AddDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = getLayoutInflater();
 
         addDialogFragmentView = inflater.inflate(R.layout.add_dialog_fragment, null);
         spinner = addDialogFragmentView.findViewById(R.id.add_spinner);
@@ -160,7 +160,7 @@ public class AddDialogFragment extends DialogFragment {
                 } else {
                     addBikesStation(nameEditText.getText().toString());
                 }
-                dataBaseRefreshInterface.refreshData();
+                refreshInterface.refreshData();
 
 
             }
@@ -220,7 +220,7 @@ public class AddDialogFragment extends DialogFragment {
         return false;
     }
 
-    public void setDataBaseRefreshInterface(DataBaseRefreshInterface dataBaseRefreshInterface) {
-        this.dataBaseRefreshInterface = dataBaseRefreshInterface;
+    public void setRefreshInterface(RefreshInterface refreshInterface) {
+        this.refreshInterface = refreshInterface;
     }
 }

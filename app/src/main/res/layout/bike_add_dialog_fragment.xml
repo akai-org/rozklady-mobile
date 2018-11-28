@@ -4,8 +4,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="24dp"
     android:orientation="vertical">
-    <!--
-        android:fontFamily="@font/dialog_font"-->
 
     <TextView
         android:id="@+id/dialog_title_textView"
@@ -36,22 +34,13 @@
         android:paddingBottom="@dimen/margin">
 
         <AutoCompleteTextView
-            android:id="@+id/stop_name_editText"
+            android:id="@+id/name_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/bike_station"
             android:textSize="@dimen/middle_text_size" />
 
     </android.support.design.widget.TextInputLayout>
-
-
-    <Spinner
-        android:id="@+id/add_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin"
-        android:padding="@dimen/padding">
-
-    </Spinner>
 
 
 </LinearLayout>

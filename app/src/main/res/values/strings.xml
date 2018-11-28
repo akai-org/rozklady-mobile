@@ -32,19 +32,21 @@
         <item>Stacja Rowerowa</item>
     </string-array>
 
-    <string name="manage_stops">Zarządzaj przystankami</string>
-    <string name="manage_bikes">Zarządzaj stacjami rowerowymi</string>
+    <string name="manage_stops">Wybierz wyświetlane przystanki</string>
+    <string name="manage_bikes">Wybierz wyświetlane stacje rowerowe</string>
     <string name="powered_by">Powered by</string>
-    <string name="title_activity_trams">TramsActivity</string>
+    <string name="title_activity_trams">Wybierz Przystanki</string>
     <string name="not_saved_message">Czy napewno chcesz wyjść bez zapisywania?</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
-    <string name="title_activity_bikes">BikesActivity</string>
+    <string name="title_activity_bikes">Wybierz Stacje Rowerowe</string>
     <string name="no_internet_connection">Brak internetu</string>
     <string name="manage_put">Wyświetlanie stacji przy Politechnice</string>
     <string name="no_places">Nie znaleziono zapisanych stacji rowerowych</string>
     <string name="missed">Niestety odjechał</string>
     <string name="ok">Ok</string>
     <string name="no_internet_connection_info">Brak internetu. Sprawdź połączenie i uruchom aplikacje ponownie.</string>
+    <string name="leaves_now">Właśnie odjeżdża!</string>
+    <string name="add_bike">Dodaj Stację Rowerową</string>
 
 </resources>

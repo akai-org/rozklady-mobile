@@ -14,7 +14,7 @@
         android:scaleY="-0.100000"
         android:translateY="90.000000">
         <path
-            android:fillColor="#41518A"
+            android:fillColor="@color/colorPrimary"
             android:pathData="M0 892 c0 -6 860 -509 891 -520 5 -2 9 115 9 262 l0 266 -450 0 c-247 0 -450 -3 -450 -8z"
             android:strokeWidth="1" />
     </group>
@@ -23,7 +23,7 @@
         android:scaleY="-0.100000"
         android:translateY="90.000000">
         <path
-            android:fillColor="#41518A"
+            android:fillColor="@color/colorPrimary"
             android:pathData="M0 285 l0 -285 450 0 450 0 0 29 c0 27 -22 41 -445 285 -244 141 -447 256 -450 256 -3 0 -5 -128 -5 -285z"
             android:strokeWidth="1" />
     </group>
@@ -32,7 +32,7 @@
         android:scaleY="-0.100000"
         android:translateY="90.000000">
         <path
-            android:fillColor="#DD1010"
+            android:fillColor="@color/colorAccent"
             android:pathData="M310 556 c0 -2 19 -37 42 -76 37 -65 43 -71 54 -55 7 10 15 22 16 27 2 5 35 -9 73 -31 52 -30 72 -38 82 -29 7 6 13 14 13 18 0 4 -32 27 -71 50 -69 41 -70 42 -55 65 9 14 16 27 16 30 0 3 -38 5 -85 5 -47 0 -85 -2 -85 -4z"
             android:strokeWidth="1" />
     </group>

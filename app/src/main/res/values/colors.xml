@@ -13,4 +13,6 @@
     <color name="orange">#FFA500</color>
     <color name="ripple_effect">#66D81B60</color>
     <color name="black">#000000</color>
+    <color name="oldLogoColor1">#41518A</color>
+    <color name="oldLogoColor2">#DD1010</color>
 </resources>

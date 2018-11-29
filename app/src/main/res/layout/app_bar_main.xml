@@ -26,21 +26,21 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/bike_fab"
-        android:layout_width="@dimen/standard_45"
-        android:layout_height="@dimen/standard_45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/standard_21"
-        android:foreground="@drawable/ic_bike_white"
-        android:foregroundGravity="center" />
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_bike_white" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/tram_fab"
-        android:layout_width="@dimen/standard_45"
-        android:layout_height="@dimen/standard_45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/standard_21"
-        android:foreground="@drawable/ic_tram_white"
-        android:foregroundGravity="center" />
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_tram_white" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

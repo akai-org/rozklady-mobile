@@ -11,8 +11,11 @@
         android:background="@drawable/ripple"
         android:clickable="true"
         android:focusable="true"
-        android:padding="@dimen/padding"
-        android:textSize="@dimen/middle_text_size" />
+        android:paddingStart="@dimen/padding_16dp"
+        android:paddingTop="@dimen/padding_16dp"
+        android:paddingEnd="@dimen/padding"
+        android:paddingBottom="24dp"
+        android:textSize="@dimen/small_text_size" />
 
     <Switch
         android:id="@+id/settings_row_switch"

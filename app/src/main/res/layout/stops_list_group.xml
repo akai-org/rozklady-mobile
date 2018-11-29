@@ -3,8 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@color/colorPrimaryLight"
-    android:paddingLeft="40dp">
+    android:paddingStart="40dp">
 
 
     <TextView
@@ -12,8 +11,9 @@
         android:id="@+id/stop_name_list_textView"
         android:layout_width="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textColor="@color/white"
-        android:textSize="@dimen/middle_text_size" />
+        android:padding="@dimen/padding_16dp"
+        android:textColor="@color/black_overlay"
+        android:textSize="@dimen/small_text_size" />
 
 
 </LinearLayout>

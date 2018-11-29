@@ -2,7 +2,6 @@ package rozklad.akai.org.pl.rozkadakai.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import java.util.ArrayList;
 import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Fragments.SettingsFragment;
 import rozklad.akai.org.pl.rozkadakai.R;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<SettingsRecyclerViewAdapter.SettingsViewHolder> {
 
@@ -65,7 +62,7 @@ public class SettingsRecyclerViewAdapter extends RecyclerView.Adapter<SettingsRe
                 }
             });
         } else if (settings.get(i).compareTo("Manage Put") == 0) {
-            Log.d(KOSSA_LOG, "With switch: " + settingsViewHolder.withSwitch + " i = " + i);
+            //Log.d(LOG_TAG, "With switch: " + settingsViewHolder.withSwitch + " i = " + i);
             settingsViewHolder.aSwitch.setChecked(showPut);
             settingsViewHolder.aSwitch.setVisibility(View.VISIBLE);
             settingsViewHolder.textView.setText(parent.getString(R.string.manage_put));

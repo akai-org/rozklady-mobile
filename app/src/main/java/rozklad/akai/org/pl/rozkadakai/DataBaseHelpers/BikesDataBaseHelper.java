@@ -5,13 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Data.Place;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 public class BikesDataBaseHelper extends SQLiteOpenHelper {
 
@@ -42,7 +39,7 @@ public class BikesDataBaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BIKE_STATION_NAME, name);
         contentValues.put(IS_SHOW, "true");
-        Log.d(KOSSA_LOG, "Adding new bike station: " + name);
+        //Log.d(LOG_TAG, "Adding new bike station: " + name);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
         if (result == -1) {

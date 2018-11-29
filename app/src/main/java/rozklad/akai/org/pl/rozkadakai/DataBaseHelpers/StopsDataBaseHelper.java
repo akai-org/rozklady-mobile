@@ -5,13 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 public class StopsDataBaseHelper extends SQLiteOpenHelper {
 
@@ -51,7 +48,7 @@ public class StopsDataBaseHelper extends SQLiteOpenHelper {
             }
         }
         contentValues.put(TAG_BOOLEANS, booleans);
-        Log.d(KOSSA_LOG, "Adding new stop: " + stop.getName() + "[" + stop.getTags() + "]");
+        //Log.d(LOG_TAG, "Adding new stop: " + stop.getName() + "[" + stop.getTags() + "]");
 
         long result = db.insert(TABLE_NAME, null, contentValues);
         if (result == -1) {

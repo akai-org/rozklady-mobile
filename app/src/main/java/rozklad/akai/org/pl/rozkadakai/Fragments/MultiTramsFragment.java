@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Adapters.StopsFragmentStatePagerAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.R;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 
 /**
@@ -103,7 +100,7 @@ public class MultiTramsFragment extends Fragment {
         }
         mListener = null;
         super.onDetach();
-        Log.d(KOSSA_LOG, "MultiTramsFragment " + stop.getName() + ": onDetach()");
+        //Log.d(LOG_TAG, "MultiTramsFragment " + stop.getName() + ": onDetach()");
     }
 
     public void setParentActivity(MainActivity parentActivity) {
@@ -115,7 +112,7 @@ public class MultiTramsFragment extends Fragment {
     }
 
     public void updateConnectionStatus(boolean connected) {
-        Log.d(KOSSA_LOG, "MultiTramsFragment updateConnectionStatus(" + connected + ")");
+        //Log.d(LOG_TAG, "MultiTramsFragment updateConnectionStatus(" + connected + ")");
         this.connected = connected;
         pagerAdapter.updateConnectionStatus(connected);
     }

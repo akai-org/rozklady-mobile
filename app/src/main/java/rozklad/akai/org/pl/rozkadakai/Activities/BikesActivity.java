@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -33,8 +32,6 @@ import rozklad.akai.org.pl.rozkadakai.DialogFragments.BikeAddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.DialogFragments.TramAddDialogFragment;
 import rozklad.akai.org.pl.rozkadakai.R;
 import rozklad.akai.org.pl.rozkadakai.RefreshInterface;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 public class BikesActivity extends AppCompatActivity implements RefreshInterface {
 
@@ -211,7 +208,7 @@ public class BikesActivity extends AppCompatActivity implements RefreshInterface
 
     @Override
     public void refreshData() {
-        Log.d(KOSSA_LOG, "Refresh database");
+        //Log.d(LOG_TAG, "Refresh database");
         places = bikesDataBaseHelper.getStationsWithBooleans();
         adapter.setPlaces(places);
         adapter.notifyDataSetChanged();

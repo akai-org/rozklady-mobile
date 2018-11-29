@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,6 @@ import rozklad.akai.org.pl.rozkadakai.Adapters.TramsAdapter;
 import rozklad.akai.org.pl.rozkadakai.Data.Tram;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.R;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 
 /**
@@ -100,7 +97,7 @@ public class TramsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = view.findViewById(R.id.trams_recycler_view);
-        Log.d(KOSSA_LOG, "Symbol: " + stopSymbol);
+        //Log.d(LOG_TAG, "Symbol: " + stopSymbol);
         if (conected) {
             trams = DataGetter.getTramsDepartures(stopSymbol);
         } else {
@@ -111,7 +108,7 @@ public class TramsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(parentActivity));
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        Log.d(KOSSA_LOG, "TramsFragment " + stopSymbol + ": After run");
+        //Log.d(LOG_TAG, "TramsFragment " + stopSymbol + ": After run");
         timer = new CountDownTimer(30000, 15000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -127,7 +124,7 @@ public class TramsFragment extends Fragment {
                     trams = DataGetter.getTramsDepartures(stopSymbol);
                     adapter.setTrams(trams);
                     adapter.notifyDataSetChanged();
-                    Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": Refresh");
+                    //Log.d(LOG_TAG, "TramsFragment " + stopName + " " + stopSymbol + ": Refresh");
                 } else {
                     adapter.notifyDataSetChanged();
                     if (fragmentId == viewPager.getCurrentItem()) {
@@ -160,7 +157,7 @@ public class TramsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        Log.d(KOSSA_LOG, "TramsFragment " + stopName + " " + stopSymbol + ": onDetach()");
+        //Log.d(LOG_TAG, "TramsFragment " + stopName + " " + stopSymbol + ": onDetach()");
         if (timer != null) {
             timer.cancel();
         }
@@ -183,7 +180,7 @@ public class TramsFragment extends Fragment {
     }
 
     public void updateConnectionStatus(boolean connected) {
-        Log.d(KOSSA_LOG, "TamsFragment updateConnectionStatus(" + connected + ")");
+        //Log.d(LOG_TAG, "TamsFragment updateConnectionStatus(" + connected + ")");
         this.conected = connected;
         if (connected) {
             if (trams != null)

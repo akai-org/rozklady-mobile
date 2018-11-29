@@ -4,15 +4,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 import rozklad.akai.org.pl.rozkadakai.Activities.MainActivity;
 import rozklad.akai.org.pl.rozkadakai.Data.Stop;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 public class StopsFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
@@ -63,7 +60,7 @@ public class StopsFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public void updateConnectionStatus(boolean connected) {
-        Log.d(KOSSA_LOG, "StopFragmentState updateConnectionStatus(" + connected + ")");
+        //Log.d(LOG_TAG, "StopFragmentState updateConnectionStatus(" + connected + ")");
         this.connected = connected;
         for (TramsFragment fragment : tramsFragments) {
             fragment.updateConnectionStatus(connected);

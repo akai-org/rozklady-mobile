@@ -21,7 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,8 +43,6 @@ import rozklad.akai.org.pl.rozkadakai.Fragments.SettingsFragment;
 import rozklad.akai.org.pl.rozkadakai.Fragments.TramsFragment;
 import rozklad.akai.org.pl.rozkadakai.R;
 import rozklad.akai.org.pl.rozkadakai.RefreshInterface;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     public void isConnected(NetworkInfo activeInfo) {
         this.isConnected = activeInfo != null && activeInfo.isConnected();
         if (actualFragment != null && started) {
-            Log.d(KOSSA_LOG, "Name: " + actualFragment.getClass().getName());
+            //Log.d(LOG_TAG, "Name: " + actualFragment.getClass().getName());
             if (actualFragment.getClass().getName().compareTo("rozklad.akai.org.pl.rozkadakai.Fragments.MultiTramsFragment") == 0) {
                 ((MultiTramsFragment) actualFragment).updateConnectionStatus(isConnected);
             } else if (actualFragment.getClass().getName().compareTo("rozklad.akai.org.pl.rozkadakai.Fragments.BikesFragment") == 0) {
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         showPut = preferences.getBoolean("showPut", false);
         inflateNavMenu();
 
-        Log.d(KOSSA_LOG, "IsConnected: " + isConnected);
+        //Log.d(LOG_TAG, "IsConnected: " + isConnected);
         fab = findViewById(R.id.fab);
         bikeFab = findViewById(R.id.bike_fab);
         tramFab = findViewById(R.id.tram_fab);
@@ -180,7 +177,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         started = true;
-        Log.d(KOSSA_LOG, "Started");
+        //Log.d(LOG_TAG, "Started");
     }
 
     private void onTramFabClick() {

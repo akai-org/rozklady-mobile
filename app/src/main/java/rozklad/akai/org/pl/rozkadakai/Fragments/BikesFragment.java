@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,6 @@ import rozklad.akai.org.pl.rozkadakai.Data.Place;
 import rozklad.akai.org.pl.rozkadakai.DataBaseHelpers.BikesDataBaseHelper;
 import rozklad.akai.org.pl.rozkadakai.DataGetter;
 import rozklad.akai.org.pl.rozkadakai.R;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -121,7 +118,7 @@ public class BikesFragment extends Fragment {
                     placesArrayList = loadMyPlaces();
                     adapter.setPlaces(placesArrayList);
                     adapter.notifyDataSetChanged();
-                    Log.d(KOSSA_LOG, "BikesFragment: Refresh");
+                    //Log.d(LOG_TAG, "BikesFragment: Refresh");
                 } else {
                     Snackbar.make(parentActivity.getFab(), getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG).show();
                 }
@@ -189,14 +186,14 @@ public class BikesFragment extends Fragment {
     }
 
     public void updateConnectionStatus(boolean connected) {
-        Log.d(KOSSA_LOG, "BikesFragment updateConnectionStatus(" + connected + ")");
+        //Log.d(LOG_TAG, "BikesFragment updateConnectionStatus(" + connected + ")");
         this.connected = connected;
         if (connected) {
             places = DataGetter.getBikePlaces();
             placesArrayList = loadMyPlaces();
             adapter.setPlaces(placesArrayList);
             adapter.notifyDataSetChanged();
-            Log.d(KOSSA_LOG, "BikesFragment: Refresh");
+            //Log.d(LOG_TAG, "BikesFragment: Refresh");
         }
     }
 

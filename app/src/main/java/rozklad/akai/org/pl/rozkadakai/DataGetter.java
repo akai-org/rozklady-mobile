@@ -1,7 +1,5 @@
 package rozklad.akai.org.pl.rozkadakai;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,8 +16,6 @@ import rozklad.akai.org.pl.rozkadakai.Requests.HttpGetRequest;
 import rozklad.akai.org.pl.rozkadakai.Requests.HttpPostRequest;
 import rozklad.akai.org.pl.rozkadakai.Requests.NamesPostRequest;
 import rozklad.akai.org.pl.rozkadakai.Requests.TagPostRequest;
-
-import static rozklad.akai.org.pl.rozkadakai.Constants.KOSSA_LOG;
 
 public class DataGetter {
 
@@ -157,7 +153,7 @@ public class DataGetter {
                 if (object.getString("name").compareTo(name) == 0) {
                     JSONArray bikesList = object.getJSONArray("bike_list");
                     int count = bikesList.length();
-                    Log.d(KOSSA_LOG, "i = " + i + " " + object.getString("name") + " count: " + count);
+                    //Log.d(LOG_TAG, "i = " + i + " " + object.getString("name") + " count: " + count);
                     return new Place(name, count);
                 }
             } catch (JSONException e) {
@@ -177,7 +173,7 @@ public class DataGetter {
 
                 if (name.toLowerCase().contains(pattern.toLowerCase())) {
                     names.add(name);
-                    Log.d(KOSSA_LOG, "Name: " + name);
+                    //Log.d(LOG_TAG, "Name: " + name);
                 }
                 if (names.size() > MAX_NAME_SIZE) {
                     break;
